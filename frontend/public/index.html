@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCOT-Web - 结构化思维链网页生成系统</title>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #6c757d;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --info-color: #17a2b8;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 1.5rem;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary-color);
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #4a90e2 0%, #6a5acd 100%);
+            color: white;
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: white;
+            color: var(--primary-color);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,.2);
+        }
+
+        .features {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2rem;
+            color: var(--dark-color);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,.1);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .feature-card p {
+            color: var(--secondary-color);
+        }
+
+        .app-interface {
+            padding: 4rem 0;
+            background-color: white;
+        }
+
+        .interface-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .interface-text {
+            flex: 1;
+        }
+
+        .interface-image {
+            flex: 1;
+            background-color: #eee;
+            height: 400px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .interface-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">SCOT-Web</div>
+            <nav>
+                <ul>
+                    <li><a href="#home">首页</a></li>
+                    <li><a href="#features">功能</a></li>
+                    <li><a href="#app">应用</a></li>
+                    <li><a href="#contact">联系</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container">
+            <h1>结构化思维链网页生成系统</h1>
+            <p>基于AI的智能网页生成工具，通过结构化思维链自动生成网页内容，提升开发效率与内容组织能力</p>
+            <a href="#app" class="btn">开始使用</a>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">核心功能</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>智能分析</h3>
+                    <p>通过AI分析参考网站的结构、样式和交互模式，提取可复用的设计特征</p>
+                </div>
+                <div class="feature-card">
+                    <h3>结构化生成</h3>
+                    <p>基于结构化思维链自动生成网页，确保内容组织清晰、逻辑性强</p>
+                </div>
+                <div class="feature-card">
+                    <h3>知识点拆解</h3>
+                    <p>将复杂网页拆解为前端知识点，便于学习和复用</p>
+                </div>
+                <div class="feature-card">
+                    <h3>一键部署</h3>
+                    <p>生成的网页可直接部署，支持快速预览和在线编辑</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="app-interface" id="app">
+        <div class="container">
+            <h2 class="section-title">应用界面</h2>
+            <div class="interface-container">
+                <div class="interface-text">
+                    <h3>完整的开发工具链</h3>
+                    <p>SCOT-Web提供从需求分析、知识点拆解到网页生成的完整工具链，支持团队协作和项目管理。</p>
+                    <p>通过PRD文档生成、知识点图谱构建和自动化代码生成，大幅提高网页开发效率。</p>
+                </div>
+                <div class="interface-image">
+                    应用界面预览图
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contact">
+        <div class="container">
+            <p>&copy; 2025 SCOT-Web. 保留所有权利.</p>
+            <p>联系我们: support@scot-web.com</p>
+        </div>
+    </footer>
+
+    <script src="src/main.js"></script>
+    <script>
+        // 页面加载完成后初始化应用
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('SCOT-Web 应用已加载');
+            
+            // 平滑滚动
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
