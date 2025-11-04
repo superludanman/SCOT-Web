@@ -1,16 +1,17 @@
-from fastapi import APIRouter, HTTPException, Form
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
 import os
 import json
 import uuid
 from datetime import datetime
+from agents.slow_mind import SlowMind
+from executor.execution_context import ExecutionContext
 
 prd_router = APIRouter()
 
 class PRDGenerateRequest(BaseModel):
-    reference_html: dict
-    user_input: Optional[str] = ""
+    reference_url: str
 
 class PRDGenerateResponse(BaseModel):
     prd_text: str
@@ -33,66 +34,28 @@ class PRDListItem(BaseModel):
 class PRDListResponse(BaseModel):
     prds: List[PRDListItem]
 
-def generate_prd_content(reference_html: dict, user_input: str) -> str:
-    """
-    根据参考网页结构和用户输入生成PRD内容
-    实际项目中这里会调用AI模型生成内容
-    """
-    title = reference_html.get("title", "未命名项目")
-    
-    prd_content = f"""
-# {title} 产品需求文档
-
-## 1. 概述
-基于用户需求和参考网页结构生成的产品需求文档。
-
-用户需求描述:
-{user_input if user_input else "未提供具体需求"}
-
-## 2. 页面结构分析
-参考网页包含以下主要结构:
-{json.dumps(reference_html.get('structure', []), ensure_ascii=False, indent=2)}
-
-## 3. 文本内容概要
-参考网页主要文本内容:
-{chr(10).join(reference_html.get('text_blocks', []))}
-
-## 4. 功能需求
-- 页面展示功能
-- 用户交互功能
-- 响应式设计
-- 浏览器兼容性
-
-## 5. 非功能需求
-- 页面加载性能
-- SEO友好
-- 代码可维护性
-- 安全性
-
-## 6. 技术选型建议
-- HTML5 + CSS3 + JavaScript
-- 响应式布局
-- 现代浏览器兼容
-"""
-    
-    return prd_content
-
 @prd_router.post("/generate", response_model=PRDGenerateResponse)
 async def generate_prd(prd_request: PRDGenerateRequest):
     """
-    基于上传网页结构生成 PRD
+    基于参考网站URL生成 PRD
     
     参数：
-    - reference_html: 提取的网页结构
-    - user_input: 用户需求描述
+    - reference_url: 参考网站URL
     """
-    # 生成PRD内容（实际项目中这里会调用AI模型）
-    prd_text = generate_prd_content(prd_request.reference_html, prd_request.user_input)
-    
-    return PRDGenerateResponse(
-        prd_text=prd_text,
-        status="success"
-    )
+    try:
+        # 初始化AI执行上下文
+        context = ExecutionContext()
+        slow_mind = SlowMind(context)
+        
+        # 生成PRD内容
+        prd_text = slow_mind.generate_prd(prd_request.reference_url)
+        
+        return PRDGenerateResponse(
+            prd_text=prd_text,
+            status="success"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"PRD生成失败: {str(e)}")
 
 @prd_router.post("/save", response_model=PRDSaveResponse)
 async def save_prd(prd_data: PRDSaveRequest):

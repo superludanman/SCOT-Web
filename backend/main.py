@@ -31,7 +31,7 @@ app.include_router(prd_router, prefix="/api/prd", tags=["PRD"])
 app.include_router(knowledge_router, prefix="/api/knowledge", tags=["Knowledge"])
 app.include_router(executor_router, prefix="/api/execute", tags=["Execute"])
 app.include_router(preview_router, prefix="/api/preview", tags=["Preview"])
-app.include_router(logs_router, prefix="/api/logs", tags["Logs"])
+app.include_router(logs_router, prefix="/api/logs", tags=["Logs"])
 
 @app.get("/")
 async def root():

@@ -5,8 +5,13 @@ import os
 import json
 import uuid
 from datetime import datetime
+from agents.fast_mind import FastMind
+from executor.execution_context import ExecutionContext
 
 knowledge_router = APIRouter()
+
+class KnowledgeExtractRequest(BaseModel):
+    reference_url: str
 
 class KnowledgeNodeData(BaseModel):
     id: str
@@ -19,6 +24,10 @@ class KnowledgeNode(BaseModel):
 
 class KnowledgeGraph(BaseModel):
     nodes: List[KnowledgeNode]
+
+class KnowledgeExtractResponse(BaseModel):
+    graph: KnowledgeGraph
+    status: str
 
 class KnowledgeSaveRequest(BaseModel):
     name: str
@@ -37,6 +46,33 @@ class KnowledgeListItem(BaseModel):
 class KnowledgeListResponse(BaseModel):
     knowledge_graphs: List[KnowledgeListItem]
 
+@knowledge_router.post("/extract", response_model=KnowledgeExtractResponse)
+async def extract_knowledge_points(knowledge_request: KnowledgeExtractRequest):
+    """
+    从参考网站中提取知识点
+    
+    参数：
+    - reference_url: 参考网站URL
+    """
+    try:
+        # 初始化AI执行上下文
+        context = ExecutionContext()
+        fast_mind = FastMind(context)
+        
+        # 提取知识点
+        knowledge_data = fast_mind.extract_knowledge_points(knowledge_request.reference_url)
+        
+        # 转换为KnowledgeGraph模型
+        nodes = [KnowledgeNode(data=KnowledgeNodeData(**node["data"])) for node in knowledge_data["nodes"]]
+        graph = KnowledgeGraph(nodes=nodes)
+        
+        return KnowledgeExtractResponse(
+            graph=graph,
+            status="success"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"知识点提取失败: {str(e)}")
+
 @knowledge_router.post("/save", response_model=KnowledgeSaveResponse)
 async def save_knowledge_graph(knowledge_data: KnowledgeSaveRequest):
     """保存知识图谱"""
@@ -52,7 +88,7 @@ async def save_knowledge_graph(knowledge_data: KnowledgeSaveRequest):
     knowledge_record = {
         "id": knowledge_id,
         "name": knowledge_data.name,
-        "graph": knowledge_data.graph.dict(),
+        "graph": json.loads(knowledge_data.graph.json()),
         "created_at": datetime.now().isoformat()
     }
     
