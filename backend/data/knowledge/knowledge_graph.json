@@ -3,7 +3,7 @@
     {
       "data": {
         "id": "chapter1",
-        "label": "模块一:文本与页面结构基础",
+        "label": "模块一:HTML基础",
         "category": "media-block",
         "placementHint": "main-content"
       }
@@ -20,6 +20,150 @@
       "data": {
         "id": "text_format",
         "label": "应用文本格式(加粗、斜体)",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "image",
+        "label": "插入图片元素",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "link",
+        "label": "创建超链接",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "list",
+        "label": "使用列表元素(有序、无序)",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "table",
+        "label": "创建表格结构",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "form",
+        "label": "设计表单输入",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "chapter2",
+        "label": "模块二:CSS基础",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "css_selectors",
+        "label": "熟悉CSS选择器",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "css_layout",
+        "label": "掌握CSS布局方法",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "css_flexbox",
+        "label": "学习Flexbox布局",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "css_grid",
+        "label": "应用Grid网格布局",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "css_media",
+        "label": "响应式媒体查询",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "css_animation",
+        "label": "实现CSS动画效果",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "chapter3",
+        "label": "模块三:JavaScript基础",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "js_variables",
+        "label": "了解JavaScript变量与数据类型",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "js_functions",
+        "label": "使用JavaScript函数",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "js_dom",
+        "label": "操作DOM元素",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "js_events",
+        "label": "处理事件",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "js_ajax",
+        "label": "异步数据交互",
         "category": "media-block",
         "placementHint": "main-content"
       }

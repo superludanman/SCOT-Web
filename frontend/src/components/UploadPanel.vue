@@ -49,11 +49,27 @@ import { uploadAPI } from '../api/index.js';
 
 export default {
   name: 'UploadPanel',
+  props: {
+    initialData: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
       url: '',
       uploadResult: null
     };
+  },
+  watch: {
+    initialData: {
+      handler(newVal) {
+        if (newVal) {
+          this.uploadResult = newVal;
+        }
+      },
+      immediate: true
+    }
   },
   methods: {
     triggerFileInput() {
@@ -84,7 +100,7 @@ export default {
         this.$emit('upload-complete', result);
       } catch (error) {
         console.error('文件上传失败:', error);
-        alert('文件上传失败: ' + error.message);
+        alert('文件上传失败: ' + (error.message || '未知错误'));
       }
     },
     
@@ -98,9 +114,11 @@ export default {
         };
         this.uploadResult = result;
         this.$emit('upload-complete', result);
+        // 自动触发下一步
+        this.proceedToPRD();
       } catch (error) {
         console.error('URL解析失败:', error);
-        alert('URL解析失败: ' + error.message);
+        alert('URL解析失败: ' + (error.message || '未知错误'));
       }
     },
     

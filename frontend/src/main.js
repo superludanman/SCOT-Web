@@ -1,5 +1,22 @@
 // 前端主入口文件
 import axios from 'axios';
+import { createApp } from 'vue';
+import Dashboard from './components/Dashboard.vue';
+import './styles/main.css';
+
+// 创建Vue应用并挂载到正确的元素
+const app = createApp({
+  components: {
+    Dashboard
+  },
+  template: `
+    <Dashboard />
+  `
+});
+
+// 挂载应用到新的挂载点
+app.mount('#vue-app');
+console.log('SCOT-Web前端应用已启动');
 
 // 创建API实例
 const api = axios.create({

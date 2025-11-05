@@ -3,45 +3,47 @@
     <h2 class="card-title">网页生成</h2>
     
     <div v-if="!generatedFiles">
-      <div class="form-group">
-        <label for="referenceInfo">参考网站信息:</label>
-        <textarea 
-          id="referenceInfo" 
-          v-model="referenceInfo" 
-          class="form-control" 
-          rows="4" 
-          placeholder="请输入参考网站的相关信息"
-        ></textarea>
+      <div v-if="!prdData || !knowledgeData">
+        <div class="alert alert-warning">
+          请先完成PRD文档和知识点图谱的生成与保存
+        </div>
       </div>
       
-      <div class="form-group">
-        <label>知识点信息:</label>
-        <textarea 
-          v-model="knowledgePoints" 
-          class="form-control" 
-          rows="6" 
-          placeholder="请输入知识点信息（JSON格式）"
-        ></textarea>
+      <div v-else>
+        <div class="form-group">
+          <label>PRD文档:</label>
+          <div class="form-control">
+            <p><strong>{{ prdData.title }}</strong></p>
+            <p class="text-muted">内容长度: {{ prdData.content?.length || 0 }} 字符</p>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>知识点图谱:</label>
+          <div class="form-control">
+            <p><strong>{{ knowledgeData.name }}</strong></p>
+            <p class="text-muted">知识点数量: {{ knowledgeData?.graph?.nodes?.length || 0 }} 个</p>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="userNote">用户备注:</label>
+          <input 
+            type="text" 
+            id="userNote" 
+            v-model="userNote" 
+            class="form-control" 
+            placeholder="可选：添加一些备注信息"
+          />
+        </div>
+        
+        <button 
+          @click="generateWebsite" 
+          class="btn"
+        >
+          生成网页
+        </button>
       </div>
-      
-      <div class="form-group">
-        <label for="userNote">用户备注:</label>
-        <input 
-          type="text" 
-          id="userNote" 
-          v-model="userNote" 
-          class="form-control" 
-          placeholder="可选：添加一些备注信息"
-        />
-      </div>
-      
-      <button 
-        @click="generateWebsite" 
-        :disabled="!referenceInfo || !knowledgePoints" 
-        class="btn"
-      >
-        生成网页
-      </button>
       
       <div v-if="loading" class="mt-3 text-center">
         <div class="spinner"></div>
@@ -77,14 +79,22 @@
 </template>
 
 <script>
-import { executorAPI, previewAPI } from '../api/index.js';
+import { executorAPI } from '../api/index.js';
 
 export default {
   name: 'GeneratePanel',
+  props: {
+    prdData: {
+      type: Object,
+      default: null
+    },
+    knowledgeData: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
-      referenceInfo: '',
-      knowledgePoints: '',
       userNote: '',
       generatedFiles: null,
       taskId: '',
@@ -96,17 +106,9 @@ export default {
       this.loading = true;
       
       try {
-        // 验证知识点信息是否为有效的JSON
-        let knowledgeData;
-        try {
-          knowledgeData = JSON.parse(this.knowledgePoints);
-        } catch (e) {
-          throw new Error('知识点信息必须是有效的JSON格式');
-        }
-        
         const requestData = {
-          reference_info: this.referenceInfo,
-          knowledge_points: knowledgeData,
+          prd: this.prdData,
+          knowledge_graph: this.knowledgeData?.graph || null,
           user_note: this.userNote
         };
         
@@ -135,8 +137,6 @@ export default {
     },
     
     resetGeneration() {
-      this.referenceInfo = '';
-      this.knowledgePoints = '';
       this.userNote = '';
       this.generatedFiles = null;
       this.taskId = '';

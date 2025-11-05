@@ -1,29 +1,29 @@
 <template>
-  <div class="dashboard">
+  <div class="dashboard card">
     <h1 class="text-center mb-4">SCOT-Web 控制面板</h1>
     
     <div class="steps-container">
-      <div class="step" :class="{ 'active': currentStep === 1 }">
+      <div class="step" :class="{ 'active': currentStep === 1 }" @click="goToStep(1)">
         <div class="step-number">1</div>
         <div class="step-title">上传参考网页</div>
       </div>
       
-      <div class="step" :class="{ 'active': currentStep === 2 }">
+      <div class="step" :class="{ 'active': currentStep === 2 }" @click="goToStep(2)">
         <div class="step-number">2</div>
         <div class="step-title">生成PRD文档</div>
       </div>
       
-      <div class="step" :class="{ 'active': currentStep === 3 }">
+      <div class="step" :class="{ 'active': currentStep === 3 }" @click="goToStep(3)">
         <div class="step-number">3</div>
         <div class="step-title">提取知识点</div>
       </div>
       
-      <div class="step" :class="{ 'active': currentStep === 4 }">
+      <div class="step" :class="{ 'active': currentStep === 4 }" @click="goToStep(4)">
         <div class="step-number">4</div>
         <div class="step-title">生成网页</div>
       </div>
       
-      <div class="step" :class="{ 'active': currentStep === 5 }">
+      <div class="step" :class="{ 'active': currentStep === 5 }" @click="goToStep(5)">
         <div class="step-number">5</div>
         <div class="step-title">预览结果</div>
       </div>
@@ -32,6 +32,7 @@
     <div class="panels-container mt-4">
       <UploadPanel 
         v-if="currentStep === 1" 
+        :initial-data="uploadData"
         @upload-complete="onUploadComplete"
         @proceed-to-prd="proceedToPRD"
       />
@@ -39,18 +40,26 @@
       <PRDPanel 
         v-if="currentStep === 2" 
         ref="prdPanel"
+        :reference-data="referenceData"
+        :prd-data="prdData"
         @prd-saved="onPRDSaved"
+        @prd-generated="onPRDGenerated"
       />
       
       <KnowledgeGraph 
         v-if="currentStep === 3" 
         ref="knowledgeGraph"
+        :reference-data="referenceData"
+        :knowledge-data="knowledgeData"
         @knowledge-saved="onKnowledgeSaved"
+        @knowledge-extracted="onKnowledgeExtracted"
       />
       
       <GeneratePanel 
         v-if="currentStep === 4" 
         ref="generatePanel"
+        :prd-data="prdData"
+        :knowledge-data="knowledgeData"
         @website-generated="onWebsiteGenerated"
       />
       
@@ -93,45 +102,69 @@ export default {
   data() {
     return {
       currentStep: 1,
-      referenceData: null,
-      generatedTaskId: '',
+      uploadData: null,       // 上传的数据
+      referenceData: null,    // 参考数据（用于PRD和知识点提取）
+      prdData: null,          // PRD数据
+      knowledgeData: null,    // 知识点数据
+      generatedTaskId: '',    // 生成任务ID
       canProceed: false
     };
   },
   methods: {
+    goToStep(step) {
+      // 允许用户点击步骤标题导航到对应步骤
+      if (step <= 5 && step >= 1) {
+        this.currentStep = step;
+        this.canProceed = false;
+      }
+    },
+    
     onUploadComplete(data) {
+      this.uploadData = data;
       this.referenceData = data;
       this.canProceed = true;
+      console.log('上传完成，可以进行下一步');
     },
     
     proceedToPRD(data) {
+      this.uploadData = data;
       this.referenceData = data;
       this.currentStep = 2;
       this.canProceed = false;
-      
-      // 将参考数据传递给PRD面板
-      if (this.$refs.prdPanel) {
-        // 这里可以设置PRD面板的初始数据
-      }
+      console.log('进入PRD生成步骤');
+    },
+    
+    onPRDGenerated(data) {
+      this.prdData = data;
+      console.log('PRD已生成');
     },
     
     onPRDSaved() {
       this.canProceed = true;
+      console.log('PRD已保存，可以进行下一步');
+    },
+    
+    onKnowledgeExtracted(data) {
+      this.knowledgeData = data;
+      console.log('知识点已提取');
     },
     
     onKnowledgeSaved() {
       this.canProceed = true;
+      console.log('知识点已保存，可以进行下一步');
     },
     
     onWebsiteGenerated(data) {
       this.generatedTaskId = data.taskId;
       this.canProceed = true;
+      console.log('网页生成完成，可以进行下一步');
     },
     
     nextStep() {
       if (this.currentStep < 5) {
         this.currentStep++;
         this.canProceed = false;
+        console.log('进入步骤:', this.currentStep);
       }
     },
     
@@ -139,6 +172,7 @@ export default {
       if (this.currentStep > 1) {
         this.currentStep--;
         this.canProceed = false;
+        console.log('返回步骤:', this.currentStep);
       }
     }
   }
@@ -148,12 +182,17 @@ export default {
 <style scoped>
 .dashboard {
   padding: 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-top: 20px;
 }
 
 .steps-container {
   display: flex;
   justify-content: space-between;
   position: relative;
+  cursor: pointer;
 }
 
 .steps-container::before {
@@ -172,6 +211,7 @@ export default {
   flex-direction: column;
   align-items: center;
   z-index: 2;
+  transition: all 0.3s ease;
 }
 
 .step-number {
@@ -202,6 +242,10 @@ export default {
 .step.active .step-title {
   color: var(--primary-color);
   font-weight: bold;
+}
+
+.step:hover:not(.active) .step-number {
+  background-color: #e9ecef;
 }
 
 .panels-container {

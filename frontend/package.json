@@ -1,0 +1,26 @@
+{
+  "name": "scot-web-frontend",
+  "version": "1.0.0",
+  "description": "SCOT-Web Frontend Application",
+  "main": "src/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.13.2",
+    "vue": "^3.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.6.2",
+    "vite": "^4.0.0"
+  },
+  "keywords": [
+    "scot-web",
+    "frontend",
+    "vue"
+  ],
+  "author": "SCOT-Web Team",
+  "license": "MIT"
+}

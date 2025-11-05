@@ -3,35 +3,52 @@
     <h2 class="card-title">知识点图谱</h2>
     
     <div v-if="!knowledgeGraph">
-      <div class="form-group">
-        <label for="referenceUrl">参考网站URL:</label>
-        <input 
-          type="url" 
-          id="referenceUrl" 
-          v-model="referenceUrl" 
-          class="form-control" 
-          placeholder="https://example.com"
-        />
+      <div v-if="referenceData">
+        <div class="alert alert-info">
+          <p><strong>参考信息:</strong></p>
+          <p>标题: {{ referenceData.title }}</p>
+          <p>文本块数量: {{ referenceData.text_blocks?.length || 0 }}</p>
+        </div>
+        
+        <button 
+          @click="extractKnowledgeFromReference" 
+          class="btn"
+        >
+          基于参考信息提取知识点
+        </button>
       </div>
       
-      <div class="form-group">
-        <label for="uploadedFile">或上传HTML文件:</label>
-        <input 
-          type="file" 
-          id="uploadedFile" 
-          @change="handleFileUpload" 
-          class="form-control" 
-          accept=".html,.htm"
-        />
+      <div v-else>
+        <div class="form-group">
+          <label for="referenceUrl">参考网站URL:</label>
+          <input 
+            type="url" 
+            id="referenceUrl" 
+            v-model="referenceUrl" 
+            class="form-control" 
+            placeholder="https://example.com"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="uploadedFile">或上传HTML文件:</label>
+          <input 
+            type="file" 
+            id="uploadedFile" 
+            @change="handleFileUpload" 
+            class="form-control" 
+            accept=".html,.htm"
+          />
+        </div>
+        
+        <button 
+          @click="extractKnowledge" 
+          :disabled="!referenceUrl && !uploadedFile" 
+          class="btn"
+        >
+          提取知识点
+        </button>
       </div>
-      
-      <button 
-        @click="extractKnowledge" 
-        :disabled="!referenceUrl && !uploadedFile" 
-        class="btn"
-      >
-        提取知识点
-      </button>
       
       <div v-if="loading" class="mt-3 text-center">
         <div class="spinner"></div>
@@ -78,10 +95,20 @@
 </template>
 
 <script>
-import { knowledgeAPI } from '../api/index.js';
+import { knowledgeAPI, uploadAPI } from '../api/index.js';
 
 export default {
   name: 'KnowledgeGraph',
+  props: {
+    referenceData: {
+      type: Object,
+      default: null
+    },
+    knowledgeData: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
       referenceUrl: '',
@@ -91,12 +118,48 @@ export default {
       loading: false
     };
   },
+  watch: {
+    knowledgeData: {
+      handler(newVal) {
+        if (newVal) {
+          this.knowledgeGraph = newVal.graph;
+          this.graphName = newVal.name;
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
     handleFileUpload(event) {
       const files = event.target.files;
       if (files.length > 0) {
         this.uploadedFile = files[0];
         this.referenceUrl = ''; // 清除URL输入
+      }
+    },
+    
+    async extractKnowledgeFromReference() {
+      this.loading = true;
+      
+      try {
+        // 基于参考数据提取知识点
+        const response = await knowledgeAPI.extractKnowledge({
+          reference_info: this.referenceData
+        });
+        
+        this.knowledgeGraph = response.graph;
+        this.graphName = `知识点: ${this.referenceData.title}`;
+        
+        // 通知父组件知识点已提取
+        this.$emit('knowledge-extracted', {
+          graph: response.graph,
+          name: `知识点: ${this.referenceData.title}`
+        });
+      } catch (error) {
+        console.error('知识点提取失败:', error);
+        alert('知识点提取失败: ' + (error.message || '未知错误'));
+      } finally {
+        this.loading = false;
       }
     },
     
@@ -110,20 +173,32 @@ export default {
           // 通过上传文件提取知识点
           const formData = new FormData();
           formData.append('file', this.uploadedFile);
-          const response = await knowledgeAPI.extractKnowledgeFromFile(formData);
+          const response = await uploadAPI.extractKnowledgeFromFile(formData);
           knowledgeData = response.graph;
         } else if (this.referenceUrl) {
           // 通过URL提取知识点
           const requestData = { reference_url: this.referenceUrl };
           const response = await knowledgeAPI.extractKnowledge(requestData);
           knowledgeData = response.graph;
+        } else {
+          throw new Error('请选择一个文件或输入一个URL');
         }
         
         this.knowledgeGraph = knowledgeData;
         this.graphName = this.referenceUrl ? `知识点: ${new URL(this.referenceUrl).hostname}` : `知识点: ${this.uploadedFile.name}`;
+        
+        // 通知父组件知识点已提取
+        this.$emit('knowledge-extracted', {
+          graph: knowledgeData,
+          name: this.graphName
+        });
       } catch (error) {
         console.error('知识点提取失败:', error);
-        alert('知识点提取失败: ' + (error.message || '未知错误'));
+        if (error.message) {
+          alert('知识点提取失败: ' + error.message);
+        } else {
+          alert('知识点提取失败: ' + JSON.stringify(error));
+        }
       } finally {
         this.loading = false;
       }
@@ -155,7 +230,10 @@ export default {
       this.uploadedFile = null;
       this.knowledgeGraph = null;
       this.graphName = '';
-      document.getElementById('uploadedFile').value = ''; // 清空文件输入
+      const fileInput = document.getElementById('uploadedFile');
+      if (fileInput) {
+        fileInput.value = ''; // 清空文件输入
+      }
     }
   }
 };

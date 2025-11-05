@@ -1,0 +1,177 @@
+{
+  "id": "74aed60e-670f-4659-a48a-c8edbb193ade",
+  "name": "知识点: www.wcf-bestcat.de",
+  "graph": {
+    "nodes": [
+      {
+        "data": {
+          "id": "chapter1",
+          "label": "模块一:HTML基础",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_paragraph",
+          "label": "使用h元素和p元素体验标题与段落",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_format",
+          "label": "应用文本格式(加粗、斜体)",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "image",
+          "label": "插入图片元素",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "link",
+          "label": "创建超链接",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "list",
+          "label": "使用列表元素(有序、无序)",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "table",
+          "label": "创建表格结构",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "form",
+          "label": "设计表单输入",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "chapter2",
+          "label": "模块二:CSS基础",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "css_selectors",
+          "label": "熟悉CSS选择器",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "css_layout",
+          "label": "掌握CSS布局方法",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "css_flexbox",
+          "label": "学习Flexbox布局",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "css_grid",
+          "label": "应用Grid网格布局",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "css_media",
+          "label": "响应式媒体查询",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "css_animation",
+          "label": "实现CSS动画效果",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "chapter3",
+          "label": "模块三:JavaScript基础",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "js_variables",
+          "label": "了解JavaScript变量与数据类型",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "js_functions",
+          "label": "使用JavaScript函数",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "js_dom",
+          "label": "操作DOM元素",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "js_events",
+          "label": "处理事件",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "js_ajax",
+          "label": "异步数据交互",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      }
+    ]
+  },
+  "created_at": "2025-11-05T19:31:13.369450"
+}

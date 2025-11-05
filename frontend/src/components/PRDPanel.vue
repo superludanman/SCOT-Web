@@ -3,35 +3,52 @@
     <h2 class="card-title">PRD文档生成</h2>
     
     <div v-if="!prdContent">
-      <div class="form-group">
-        <label for="referenceUrl">参考网站URL:</label>
-        <input 
-          type="url" 
-          id="referenceUrl" 
-          v-model="referenceUrl" 
-          class="form-control" 
-          placeholder="https://example.com"
-        />
+      <div v-if="referenceData">
+        <div class="alert alert-info">
+          <p><strong>参考信息:</strong></p>
+          <p>标题: {{ referenceData.title }}</p>
+          <p>文本块数量: {{ referenceData.text_blocks?.length || 0 }}</p>
+        </div>
+        
+        <button 
+          @click="generatePRDFromReference" 
+          class="btn"
+        >
+          基于参考信息生成PRD文档
+        </button>
       </div>
       
-      <div class="form-group">
-        <label for="uploadedFile">或上传HTML文件:</label>
-        <input 
-          type="file" 
-          id="uploadedFile" 
-          @change="handleFileUpload" 
-          class="form-control" 
-          accept=".html,.htm"
-        />
+      <div v-else>
+        <div class="form-group">
+          <label for="referenceUrl">参考网站URL:</label>
+          <input 
+            type="url" 
+            id="referenceUrl" 
+            v-model="referenceUrl" 
+            class="form-control" 
+            placeholder="https://example.com"
+          />
+        </div>
+        
+        <div class="form-group">
+          <label for="uploadedFile">或上传HTML文件:</label>
+          <input 
+            type="file" 
+            id="uploadedFile" 
+            @change="handleFileUpload" 
+            class="form-control" 
+            accept=".html,.htm"
+          />
+        </div>
+        
+        <button 
+          @click="generatePRD" 
+          :disabled="!referenceUrl && !uploadedFile" 
+          class="btn"
+        >
+          生成PRD文档
+        </button>
       </div>
-      
-      <button 
-        @click="generatePRD" 
-        :disabled="!referenceUrl && !uploadedFile" 
-        class="btn"
-      >
-        生成PRD文档
-      </button>
       
       <div v-if="loading" class="mt-3 text-center">
         <div class="spinner"></div>
@@ -74,10 +91,20 @@
 </template>
 
 <script>
-import { prdAPI } from '../api/index.js';
+import { prdAPI, uploadAPI } from '../api/index.js';
 
 export default {
   name: 'PRDPanel',
+  props: {
+    referenceData: {
+      type: Object,
+      default: null
+    },
+    prdData: {
+      type: Object,
+      default: null
+    }
+  },
   data() {
     return {
       referenceUrl: '',
@@ -87,12 +114,48 @@ export default {
       loading: false
     };
   },
+  watch: {
+    prdData: {
+      handler(newVal) {
+        if (newVal) {
+          this.prdContent = newVal.content;
+          this.prdTitle = newVal.title;
+        }
+      },
+      immediate: true
+    }
+  },
   methods: {
     handleFileUpload(event) {
       const files = event.target.files;
       if (files.length > 0) {
         this.uploadedFile = files[0];
         this.referenceUrl = ''; // 清除URL输入
+      }
+    },
+    
+    async generatePRDFromReference() {
+      this.loading = true;
+      
+      try {
+        // 基于参考数据生成PRD
+        const response = await prdAPI.generatePRD({
+          reference_info: this.referenceData
+        });
+        
+        this.prdContent = response.prd_text;
+        this.prdTitle = `PRD: ${this.referenceData.title}`;
+        
+        // 通知父组件PRD已生成
+        this.$emit('prd-generated', {
+          content: response.prd_text,
+          title: `PRD: ${this.referenceData.title}`
+        });
+      } catch (error) {
+        console.error('PRD生成失败:', error);
+        alert('PRD生成失败: ' + (error.message || '未知错误'));
+      } finally {
+        this.loading = false;
       }
     },
     
@@ -106,20 +169,32 @@ export default {
           // 通过上传文件生成PRD
           const formData = new FormData();
           formData.append('file', this.uploadedFile);
-          const response = await prdAPI.generatePRDFromFile(formData);
+          const response = await uploadAPI.generatePRDFromFile(formData);
           prdData = response.prd_text;
         } else if (this.referenceUrl) {
           // 通过URL生成PRD
           const requestData = { reference_url: this.referenceUrl };
           const response = await prdAPI.generatePRD(requestData);
           prdData = response.prd_text;
+        } else {
+          throw new Error('请选择一个文件或输入一个URL');
         }
         
         this.prdContent = prdData;
         this.prdTitle = this.referenceUrl ? `PRD: ${new URL(this.referenceUrl).hostname}` : `PRD: ${this.uploadedFile.name}`;
+        
+        // 通知父组件PRD已生成
+        this.$emit('prd-generated', {
+          content: prdData,
+          title: this.prdTitle
+        });
       } catch (error) {
         console.error('PRD生成失败:', error);
-        alert('PRD生成失败: ' + (error.message || '未知错误'));
+        if (error.message) {
+          alert('PRD生成失败: ' + error.message);
+        } else {
+          alert('PRD生成失败: ' + JSON.stringify(error));
+        }
       } finally {
         this.loading = false;
       }
@@ -151,7 +226,10 @@ export default {
       this.uploadedFile = null;
       this.prdContent = '';
       this.prdTitle = '';
-      document.getElementById('uploadedFile').value = ''; // 清空文件输入
+      const fileInput = document.getElementById('uploadedFile');
+      if (fileInput) {
+        fileInput.value = ''; // 清空文件输入
+      }
     }
   }
 };
