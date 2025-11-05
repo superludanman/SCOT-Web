@@ -93,6 +93,40 @@ class APIService {
     }
   }
 
+  // 下载文件
+  async download(url) {
+    try {
+      const response = await apiClient.get(url, {
+        responseType: 'blob'
+      });
+      
+      // 获取文件名
+      const contentDisposition = response.headers['content-disposition'];
+      let filename = 'download';
+      if (contentDisposition) {
+        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+        if (filenameMatch.length === 2) {
+          filename = filenameMatch[1];
+        }
+      }
+      
+      // 创建下载链接
+      const blob = new Blob([response.data]);
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(downloadUrl);
+      
+      return { success: true };
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
   // 错误处理
   handleError(error) {
     if (error.response) {

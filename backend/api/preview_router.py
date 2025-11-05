@@ -12,8 +12,8 @@ async def preview_website(task_id: str):
     参数：
     - task_id: 任务 ID
     """
-    # 构建结果文件路径
-    result_dir = os.path.join("data", "results", task_id)
+    # 构建结果文件路径 - 根据实际生成的文件结构调整路径
+    result_dir = os.path.join("data", "results", "project", "public")
     html_path = os.path.join(result_dir, "index.html")
     
     # 检查文件是否存在
@@ -75,7 +75,8 @@ async def preview_website(task_id: str):
 @preview_router.get("/file/{task_id}/{file_path:path}")
 async def get_preview_file(task_id: str, file_path: str):
     """获取预览文件（CSS, JS等）"""
-    result_dir = os.path.join("data", "results", task_id)
+    # 根据实际生成的文件结构调整路径
+    result_dir = os.path.join("data", "results", "project", "public")
     full_path = os.path.join(result_dir, file_path)
     
     # 检查文件是否存在

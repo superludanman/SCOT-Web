@@ -48,6 +48,11 @@ export const prdAPI = {
     // 删除PRD
     deletePRD: (id) => {
         return apiService.delete(`/api/prd/${id}`);
+    },
+
+    // 下载PRD
+    downloadPRD: (id) => {
+        return apiService.download(`/api/prd/download/${id}`);
     }
 };
 
@@ -76,6 +81,11 @@ export const knowledgeAPI = {
     // 删除知识图谱
     deleteKnowledgeGraph: (id) => {
         return apiService.delete(`/api/knowledge/${id}`);
+    },
+
+    // 下载知识图谱
+    downloadKnowledgeGraph: (id) => {
+        return apiService.download(`/api/knowledge/download/${id}`);
     }
 };
 
@@ -89,6 +99,11 @@ export const executorAPI = {
     // 获取任务状态
     getTaskStatus: (taskId) => {
         return apiService.get(`/api/execute/status/${taskId}`);
+    },
+
+    // 下载生成的文件
+    downloadGeneratedFiles: (taskId) => {
+        return apiService.download(`/api/execute/download/${taskId}`);
     }
 };
 

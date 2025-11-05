@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 import os
@@ -159,3 +160,18 @@ async def delete_prd(prd_id: str):
     os.remove(file_path)
     
     return {"message": "PRD删除成功"}
+
+@prd_router.get("/download/{prd_id}")
+async def download_prd(prd_id: str):
+    """下载指定PRD文档"""
+    file_path = os.path.join("data", "prd", f"{prd_id}.json")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="PRD未找到")
+    
+    # 获取PRD标题用于文件名
+    with open(file_path, "r", encoding="utf-8") as f:
+        prd_data = json.load(f)
+    
+    filename = f"{prd_data['title']}.json"
+    return FileResponse(file_path, filename=filename)

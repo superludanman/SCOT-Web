@@ -42,7 +42,12 @@
           :src="previewUrl" 
           class="preview-frame"
           frameborder="0"
+          @load="onIframeLoad"
         ></iframe>
+      </div>
+      
+      <div class="preview-info mt-2">
+        <p>任务ID: {{ taskId }}</p>
       </div>
       
       <div class="mt-3">
@@ -81,6 +86,10 @@ export default {
       this.taskId = '';
       this.taskIdInput = '';
       this.previewUrl = '';
+    },
+    
+    onIframeLoad() {
+      console.log('预览页面加载完成');
     }
   },
   props: {
@@ -89,10 +98,15 @@ export default {
       default: ''
     }
   },
-  mounted() {
-    if (this.initialTaskId) {
-      this.taskId = this.initialTaskId;
-      this.previewUrl = `/api/preview/${this.taskId}`;
+  watch: {
+    initialTaskId: {
+      handler(newVal) {
+        if (newVal) {
+          this.taskId = newVal;
+          this.previewUrl = `/api/preview/${this.taskId}`;
+        }
+      },
+      immediate: true
     }
   }
 };
@@ -110,5 +124,12 @@ export default {
 .preview-frame {
   width: 100%;
   height: 100%;
+}
+
+.preview-info {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 </style>

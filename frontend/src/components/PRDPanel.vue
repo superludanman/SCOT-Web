@@ -83,7 +83,16 @@
       </div>
       
       <div class="d-flex justify-content-between">
-        <button @click="resetPRD" class="btn btn-secondary">重新生成</button>
+        <div>
+          <button @click="resetPRD" class="btn btn-secondary">重新生成</button>
+          <button 
+            v-if="savedPRDId" 
+            @click="downloadPRD" 
+            class="btn btn-info ml-2"
+          >
+            下载PRD
+          </button>
+        </div>
         <button @click="savePRD" class="btn btn-success" :disabled="!prdTitle">保存PRD</button>
       </div>
     </div>
@@ -111,7 +120,8 @@ export default {
       uploadedFile: null,
       prdContent: '',
       prdTitle: '',
-      loading: false
+      loading: false,
+      savedPRDId: null
     };
   },
   watch: {
@@ -219,7 +229,8 @@ export default {
           content: this.prdContent
         };
         
-        await prdAPI.savePRD(requestData);
+        const response = await prdAPI.savePRD(requestData);
+        this.savedPRDId = response.id;
         alert('PRD保存成功！');
         this.$emit('prd-saved');
       } catch (error) {
@@ -228,11 +239,23 @@ export default {
       }
     },
     
+    async downloadPRD() {
+      if (this.savedPRDId) {
+        try {
+          await prdAPI.downloadPRD(this.savedPRDId);
+        } catch (error) {
+          console.error('PRD下载失败:', error);
+          alert('PRD下载失败: ' + (error.message || '未知错误'));
+        }
+      }
+    },
+    
     resetPRD() {
       this.referenceUrl = '';
       this.uploadedFile = null;
       this.prdContent = '';
       this.prdTitle = '';
+      this.savedPRDId = null;
       const fileInput = document.getElementById('uploadedFile');
       if (fileInput) {
         fileInput.value = ''; // 清空文件输入
@@ -247,5 +270,9 @@ export default {
 textarea {
   font-family: monospace;
   font-size: 14px;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 </style>

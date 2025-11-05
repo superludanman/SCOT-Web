@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import HTMLResponse, FileResponse
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 import os
@@ -8,6 +9,7 @@ from datetime import datetime
 from agents.slow_mind import SlowMind
 from executor.task_executor import TaskExecutor
 from executor.execution_context import ExecutionContext
+import shutil
 
 executor_router = APIRouter()
 
@@ -137,3 +139,48 @@ async def get_task_status(task_id: str):
         raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"获取任务状态失败: {str(e)}")
+
+@executor_router.get("/download/{task_id}")
+async def download_generated_files(task_id: str):
+    """
+    下载生成的网页文件（打包为ZIP）
+    
+    参数：
+    - task_id: 任务ID
+    """
+    try:
+        # 检查任务是否存在
+        results_dir = os.path.join("data", "results", "project")
+        task_file = os.path.join(results_dir, f"{task_id}.json")
+        
+        if not os.path.exists(task_file):
+            raise HTTPException(status_code=404, detail="任务未找到")
+        
+        # 创建临时目录用于打包文件
+        temp_dir = os.path.join(results_dir, f"temp_{task_id}")
+        os.makedirs(temp_dir, exist_ok=True)
+        
+        # 复制生成的文件到临时目录
+        public_dir = os.path.join(results_dir, "public")
+        if os.path.exists(public_dir):
+            for item in os.listdir(public_dir):
+                source = os.path.join(public_dir, item)
+                destination = os.path.join(temp_dir, item)
+                if os.path.isfile(source):
+                    shutil.copy2(source, destination)
+                elif os.path.isdir(source):
+                    shutil.copytree(source, destination)
+        
+        # 创建ZIP文件
+        zip_path = os.path.join(results_dir, f"{task_id}.zip")
+        shutil.make_archive(os.path.splitext(zip_path)[0], 'zip', temp_dir)
+        
+        # 清理临时目录
+        shutil.rmtree(temp_dir)
+        
+        return FileResponse(zip_path, filename=f"generated_website_{task_id}.zip")
+    except HTTPException:
+        # 重新抛出HTTP异常
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"文件打包失败: {str(e)}")

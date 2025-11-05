@@ -71,8 +71,17 @@
       </div>
       
       <div class="d-flex justify-content-between">
-        <button @click="resetGeneration" class="btn btn-secondary">重新生成</button>
-        <button @click="previewWebsite" class="btn btn-info">预览网页</button>
+        <div>
+          <button @click="resetGeneration" class="btn btn-secondary">重新生成</button>
+          <button 
+            v-if="taskId" 
+            @click="downloadGeneratedFiles" 
+            class="btn btn-info ml-2"
+          >
+            下载网页文件
+          </button>
+        </div>
+        <button @click="previewWebsite" class="btn btn-primary">预览网页</button>
       </div>
     </div>
   </div>
@@ -146,6 +155,17 @@ export default {
       }
     },
     
+    async downloadGeneratedFiles() {
+      if (this.taskId) {
+        try {
+          await executorAPI.downloadGeneratedFiles(this.taskId);
+        } catch (error) {
+          console.error('网页文件下载失败:', error);
+          alert('网页文件下载失败: ' + (error.message || '未知错误'));
+        }
+      }
+    },
+    
     resetGeneration() {
       this.userNote = '';
       this.generatedFiles = null;
@@ -164,5 +184,9 @@ ul {
 
 ul li {
   margin-bottom: 0.25rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 </style>

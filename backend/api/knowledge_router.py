@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Any
 import os
@@ -159,3 +160,18 @@ async def delete_knowledge_graph(knowledge_id: str):
     os.remove(file_path)
     
     return {"message": "知识点图谱删除成功"}
+
+@knowledge_router.get("/download/{knowledge_id}")
+async def download_knowledge_graph(knowledge_id: str):
+    """下载指定知识点图谱"""
+    file_path = os.path.join("data", "knowledge", f"{knowledge_id}.json")
+    
+    if not os.path.exists(file_path):
+        raise HTTPException(status_code=404, detail="知识点图谱未找到")
+    
+    # 获取知识图谱名称用于文件名
+    with open(file_path, "r", encoding="utf-8") as f:
+        knowledge_data = json.load(f)
+    
+    filename = f"{knowledge_data['name']}.json"
+    return FileResponse(file_path, filename=filename)

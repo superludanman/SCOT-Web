@@ -87,7 +87,16 @@
       </div>
       
       <div class="d-flex justify-content-between">
-        <button @click="resetKnowledge" class="btn btn-secondary">重新提取</button>
+        <div>
+          <button @click="resetKnowledge" class="btn btn-secondary">重新提取</button>
+          <button 
+            v-if="savedKnowledgeId" 
+            @click="downloadKnowledgeGraph" 
+            class="btn btn-info ml-2"
+          >
+            下载图谱
+          </button>
+        </div>
         <button @click="saveKnowledgeGraph" class="btn btn-success" :disabled="!graphName">保存图谱</button>
       </div>
     </div>
@@ -115,7 +124,8 @@ export default {
       uploadedFile: null,
       knowledgeGraph: null,
       graphName: '',
-      loading: false
+      loading: false,
+      savedKnowledgeId: null
     };
   },
   watch: {
@@ -223,7 +233,8 @@ export default {
           graph: this.knowledgeGraph
         };
         
-        await knowledgeAPI.saveKnowledgeGraph(requestData);
+        const response = await knowledgeAPI.saveKnowledgeGraph(requestData);
+        this.savedKnowledgeId = response.id;
         alert('知识点图谱保存成功！');
         this.$emit('knowledge-saved');
       } catch (error) {
@@ -232,11 +243,23 @@ export default {
       }
     },
     
+    async downloadKnowledgeGraph() {
+      if (this.savedKnowledgeId) {
+        try {
+          await knowledgeAPI.downloadKnowledgeGraph(this.savedKnowledgeId);
+        } catch (error) {
+          console.error('知识点图谱下载失败:', error);
+          alert('知识点图谱下载失败: ' + (error.message || '未知错误'));
+        }
+      }
+    },
+    
     resetKnowledge() {
       this.referenceUrl = '';
       this.uploadedFile = null;
       this.knowledgeGraph = null;
       this.graphName = '';
+      this.savedKnowledgeId = null;
       const fileInput = document.getElementById('uploadedFile');
       if (fileInput) {
         fileInput.value = ''; // 清空文件输入
@@ -272,5 +295,9 @@ export default {
 
 .knowledge-label {
   color: var(--dark-color);
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 </style>
