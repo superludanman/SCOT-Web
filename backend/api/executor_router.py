@@ -10,6 +10,7 @@ from agents.slow_mind import SlowMind
 from executor.task_executor import TaskExecutor
 from executor.execution_context import ExecutionContext
 import shutil
+import urllib.parse
 
 executor_router = APIRouter()
 
@@ -178,7 +179,10 @@ async def download_generated_files(task_id: str):
         # 清理临时目录
         shutil.rmtree(temp_dir)
         
-        return FileResponse(zip_path, filename=f"generated_website_{task_id}.zip")
+        return FileResponse(
+            path=zip_path, 
+            filename=f"generated_website_{task_id}.zip"
+        )
     except HTTPException:
         # 重新抛出HTTP异常
         raise

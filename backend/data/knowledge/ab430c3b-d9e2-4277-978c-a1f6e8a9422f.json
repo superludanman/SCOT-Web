@@ -1,0 +1,105 @@
+{
+  "id": "ab430c3b-d9e2-4277-978c-a1f6e8a9422f",
+  "name": "知识点: index.html",
+  "graph": {
+    "nodes": [
+      {
+        "data": {
+          "id": "chapter1",
+          "label": "模块一:文本与页面结构基础",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_paragraph",
+          "label": "使用h元素和p元素体验标题与段落",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_format",
+          "label": "应用文本格式(加粗、斜体)",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_list_ol",
+          "label": "使用有序列表展示事件亮点",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_list_ul",
+          "label": "使用无序列表展示每日日程安排",
+          "category": "media-block",
+          "placementHint": "sidebar"
+        }
+      },
+      {
+        "data": {
+          "id": "media_gallery",
+          "label": "创建图片画廊展示不同猫咪品种",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "media_audio",
+          "label": "添加音频播放器",
+          "category": "media-block",
+          "placementHint": "sidebar"
+        }
+      },
+      {
+        "data": {
+          "id": "media_video",
+          "label": "添加视频播放器",
+          "category": "media-block",
+          "placementHint": "sidebar"
+        }
+      },
+      {
+        "data": {
+          "id": "form_input",
+          "label": "创建表单收集参与者信息",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "form_submit",
+          "label": "表单提交时触发提示信息",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "listener_form",
+          "label": "监听表单提交事件并处理数据",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "listener_load",
+          "label": "监听页面加载完成事件记录日志",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      }
+    ]
+  },
+  "created_at": "2025-11-06T00:26:21.995314"
+}

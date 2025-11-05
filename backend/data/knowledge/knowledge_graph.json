@@ -26,16 +26,16 @@
     },
     {
       "data": {
-        "id": "media_gallery",
-        "label": "图片展示与缩略图",
+        "id": "gallery_display",
+        "label": "图库展示图片",
         "category": "media-block",
         "placementHint": "main-content"
       }
     },
     {
       "data": {
-        "id": "text_list",
-        "label": "有序列表与无序列表",
+        "id": "list_display",
+        "label": "列表展示内容",
         "category": "media-block",
         "placementHint": "main-content"
       }
@@ -43,17 +43,25 @@
     {
       "data": {
         "id": "form_input",
-        "label": "表单输入与提交",
+        "label": "表单输入验证",
         "category": "media-block",
         "placementHint": "main-content"
       }
     },
     {
       "data": {
-        "id": "media_audio_video",
-        "label": "音频视频播放器",
+        "id": "media_player",
+        "label": "媒体播放器",
         "category": "media-block",
-        "placementHint": "sidebar"
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "custom_styles",
+        "label": "自定义样式",
+        "category": "media-block",
+        "placementHint": "main-content"
       }
     }
   ]

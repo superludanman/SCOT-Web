@@ -8,6 +8,7 @@ import uuid
 from datetime import datetime
 from agents.slow_mind import SlowMind
 from executor.execution_context import ExecutionContext
+import urllib.parse
 
 prd_router = APIRouter()
 
@@ -173,5 +174,6 @@ async def download_prd(prd_id: str):
     with open(file_path, "r", encoding="utf-8") as f:
         prd_data = json.load(f)
     
+    # 使用URL编码处理文件名，避免特殊字符导致的编码问题
     filename = f"{prd_data['title']}.json"
-    return FileResponse(file_path, filename=filename)
+    return FileResponse(path=file_path, filename=filename)

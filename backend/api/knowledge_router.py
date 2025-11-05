@@ -8,6 +8,7 @@ import uuid
 from datetime import datetime
 from agents.fast_mind import FastMind
 from executor.execution_context import ExecutionContext
+import urllib.parse
 
 knowledge_router = APIRouter()
 
@@ -173,5 +174,6 @@ async def download_knowledge_graph(knowledge_id: str):
     with open(file_path, "r", encoding="utf-8") as f:
         knowledge_data = json.load(f)
     
+    # 使用URL编码处理文件名，避免特殊字符导致的编码问题
     filename = f"{knowledge_data['name']}.json"
-    return FileResponse(file_path, filename=filename)
+    return FileResponse(path=file_path, filename=filename)

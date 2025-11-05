@@ -29,6 +29,11 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
   response => {
     console.log('API Response:', response.status, response.config.url);
+    // 对于文件下载请求，返回完整的响应对象以便访问响应头
+    if (response.config.responseType === 'blob') {
+      return response;
+    }
+    // 对于普通请求，返回数据部分
     return response.data;
   },
   error => {
@@ -100,13 +105,47 @@ class APIService {
         responseType: 'blob'
       });
       
-      // 获取文件名
-      const contentDisposition = response.headers['content-disposition'];
+      // 从响应URL中提取文件名作为备选方案
       let filename = 'download';
+      
+      // 尝试从响应头获取文件名
+      const contentDisposition = response.headers['content-disposition'] || 
+                                response.headers['Content-Disposition'] ||
+                                response.headers['content-Disposition'] ||
+                                response.headers['Content-disposition'];
+      
       if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-        if (filenameMatch.length === 2) {
-          filename = filenameMatch[1];
+        try {
+          const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (filenameMatch && filenameMatch.length === 2) {
+            filename = filenameMatch[1];
+          } else {
+            // 尝试处理UTF-8编码的文件名
+            const utf8FilenameMatch = contentDisposition.match(/filename\*=UTF-8''(.+)/);
+            if (utf8FilenameMatch && utf8FilenameMatch.length === 2) {
+              filename = decodeURIComponent(utf8FilenameMatch[1]);
+            }
+          }
+        } catch (e) {
+          console.warn('解析Content-Disposition头时出错:', e);
+        }
+      }
+      
+      // 如果从响应头获取文件名失败，则从URL中提取
+      if (filename === 'download') {
+        try {
+          const urlParts = response.config.url.split('/');
+          const lastPart = urlParts[urlParts.length - 1];
+          // 移除查询参数
+          const cleanPart = lastPart.split('?')[0];
+          if (cleanPart && cleanPart.includes('.')) {
+            filename = cleanPart;
+          } else if (cleanPart) {
+            // 如果没有扩展名，添加默认扩展名
+            filename = cleanPart + '.json';
+          }
+        } catch (e) {
+          console.warn('从URL中提取文件名时出错:', e);
         }
       }
       

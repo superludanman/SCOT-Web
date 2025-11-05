@@ -1,0 +1,89 @@
+{
+  "id": "d3771e92-ea4c-425b-81ad-5abf26154f50",
+  "name": "知识点: index.html",
+  "graph": {
+    "nodes": [
+      {
+        "data": {
+          "id": "chapter1",
+          "label": "模块一:文本与页面结构基础",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_paragraph",
+          "label": "使用h元素和p元素体验标题与段落",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_format",
+          "label": "应用文本格式(加粗、斜体)",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "gallery_image",
+          "label": "创建图片画廊",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "list_order",
+          "label": "使用有序列表展示活动亮点",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "form_input",
+          "label": "构建表单输入框",
+          "category": "input",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "form_submit",
+          "label": "表单提交事件处理",
+          "category": "input",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "list_unorder",
+          "label": "使用无序列表展示日程安排",
+          "category": "media-block",
+          "placementHint": "sidebar"
+        }
+      },
+      {
+        "data": {
+          "id": "media_audio",
+          "label": "嵌入音频播放器",
+          "category": "media-block",
+          "placementHint": "sidebar"
+        }
+      },
+      {
+        "data": {
+          "id": "media_video",
+          "label": "嵌入视频播放器",
+          "category": "media-block",
+          "placementHint": "sidebar"
+        }
+      }
+    ]
+  },
+  "created_at": "2025-11-06T00:25:24.026250"
+}
