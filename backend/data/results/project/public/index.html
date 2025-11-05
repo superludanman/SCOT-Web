@@ -3,55 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WCF Best Cat</title>
+    <title>WCF Best Cat - Cat Exhibition</title>
     <style>
         body {
+            background-color: #f7f4ed;
+            color: #333333;
             font-family: "Roboto", sans-serif;
-            background-color: #f4f4f8;
-            color: #222222;
+            line-height: 1.6;
             margin: 0;
             padding: 0;
         }
-
-        header {
-            background-color: #ffffff;
-            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        h1, h2, h3 {
+            color: #b88a44;
         }
-        
-        main {
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+
+        /* Layout */
+        .container {
             display: flex;
-            flex-direction: row;
-            gap: 16px;
+            min-height: 100vh;
             padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
         }
-
         .main {
             flex: 0 0 70%;
+            padding: 20px;
         }
-
         .sidebar {
             flex: 0 0 30%;
+            padding: 20px;
         }
 
-        h1 {
-            font-size: 2.4rem;
-        }
-
-        h2 {
-            font-size: 1.8rem;
-        }
-
-        p {
-            font-size: 16px;
-            line-height: 1.5;
-        }
-
+        /* Media and Gallery */
         .media-container {
             background-color: #fff;
             padding: 16px;
@@ -59,133 +43,130 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             margin-bottom: 20px;
         }
-
         #media_image_image {
             width: 100%;
-            border-radius: 10px;
+            display: block;
+            border-radius: 6px;
+            transition: transform 0.3s ease;
         }
-
+        #media_image_image:hover {
+            transform: scale(1.05);
+        }
         .gallery {
-            display: flex;
-            gap: 16px;
-            margin-top: 16px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
         }
-
         .gallery img {
-            flex: 1;
-            border-radius: 5px;
-        }
-
-        .media-content {
             width: 100%;
+            border-radius: 6px;
+            transition: transform 0.3s ease;
+        }
+        .gallery img:hover {
+            transform: scale(1.05);
         }
 
-        #media_video_video {
-            width: 100%;
-            border-radius: 5px;
-            margin-bottom: 16px;
-        }
-
-        #media_audio_track {
-            width: 100%;
-        }
-
-        .list-container ol, .list-container ul {
-            list-style: none;
+        /* List Styles */
+        #text_list_ol_events, 
+        #text_list_ul_schedule {
             padding: 0;
+            list-style: none;
+            margin-bottom: 20px;
+        }
+        #text_list_ol_events li,
+        #text_list_ul_schedule li {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
         }
 
-        .list-container li {
-            border-bottom: 1px solid #dcdcdc;
-            margin-bottom: 10px;
-            padding-bottom: 10px;
+        /* Form Styles */
+        form {
+            margin-top: 20px;
         }
-
-        .form-container input, .form-container button {
-            width: calc(100% - 24px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #dcdcdc;
+        input[type="text"], input[type="email"] {
+            width: calc(100% - 26px);
+            padding: 12px;
+            margin-bottom: 12px;
+            border: 2px solid #e0e0e0;
             border-radius: 5px;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             transition: border-color 0.3s ease;
         }
-
-        .form-container input:focus {
-            border-color: #562c96;
+        input[type="text"]:focus, input[type="email"]:focus {
+            border-color: #b88a44;
         }
-
-        .form-container button {
-            background-color: #562c96;
-            color: #fff;
+        button {
+            background-color: #b88a44;
+            color: #ffffff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-
-        .form-container button:hover {
-            background-color: #6e3bc6;
+        button:hover {
+            background-color: #9a7630;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>WCF Best Cat</h1>
-    </header>
-
-    <main>
+    <div class="container">
         <div class="main">
-            <h2 id="text_paragraph_title">Welcome to WCF Best Cat Exhibition</h2>
-            <p id="text_paragraph_intro">Discover the world of cats, their breeds, examine characteristics and much more.</p>
-            
+            <h1 id="text_paragraph_title">Welcome to the WCF Best Cat Exhibition</h1>
+            <p>Explore the wonderful world of feline friends and discover amazing cat breeds from all around the world.</p>
+
             <div class="media-container">
-                <img id="media_image_image" src="https://via.placeholder.com/800x400" alt="Main Cat Image">
+                <img id="media_image_image" src="https://via.placeholder.com/800x600" alt="Main Cat Image">
                 <div class="gallery">
-                    <img src="https://via.placeholder.com/150x100" alt="Cat Thumbnail 1">
-                    <img src="https://via.placeholder.com/150x100" alt="Cat Thumbnail 2">
-                    <img src="https://via.placeholder.com/150x100" alt="Cat Thumbnail 3">
+                    <img src="https://via.placeholder.com/150" alt="Cat Thumbnail 1">
+                    <img src="https://via.placeholder.com/150" alt="Cat Thumbnail 2">
+                    <img src="https://via.placeholder.com/150" alt="Cat Thumbnail 3">
                 </div>
             </div>
 
-            <div class="list-container">
-                <h2>Upcoming Events</h2>
-                <ol id="text_list_ol_events">
-                    <li>International Cat Show - March</li>
-                    <li>National Breed Presentation - April</li>
-                    <li>Annual Cat Lovers Meet - June</li>
-                </ol>
+            <h2>Upcoming Events</h2>
+            <ol id="text_list_ol_events">
+                <li>Cat Beauty Contest</li>
+                <li>Interactive Cat Show</li>
+                <li>Pet Adoption Day</li>
+            </ol>
+            
+            <h3>Schedule</h3>
+            <ul id="text_list_ul_schedule">
+                <li>Opening Ceremony - 9:00AM</li>
+                <li>Guest Speaker: Dr. Whiskers - 11:00AM</li>
+                <li>Cuddle Session - 2:00PM</li>
+            </ul>
 
-                <h2>Today's Schedule</h2>
-                <ul id="text_list_ul_schedule">
-                    <li>Breed Workshop - 10 AM</li>
-                    <li>Nutrition Seminar - 2 PM</li>
-                    <li>Veterinary Consultation - 6 PM</li>
-                </ul>
-            </div>
+            <form>
+                <h3>Sign Up for Updates</h3>
+                <input type="text" name="name" placeholder="Your Name" required>
+                <input type="email" name="email" placeholder="Your Email" required>
+                <div>
+                    <input type="checkbox" id="newsletter">
+                    <label for="newsletter">Subscribe for newsletter</label>
+                </div>
+                <button type="button" data-action="form-submit">Submit</button>
+            </form>
         </div>
-
-        <aside class="sidebar">
+        
+        <div class="sidebar">
             <div class="media-container">
-                <video id="media_video_video" controls>
+                <video id="media_video_video" controls width="100%">
                     <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
-                
-                <audio id="media_audio_track" controls>
-                    <source src="https://www.w3schools.com/html/horse.ogg" type="audio/ogg">
+                <audio id="media_audio_track" controls width="100%">
+                    <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mp3">
                     Your browser does not support the audio element.
                 </audio>
             </div>
+        </div>
+    </div>
 
-            <div class="form-container">
-                <h2>Contact Us</h2>
-                <input type="text" placeholder="Your Name" data-action="name-input">
-                <input type="email" placeholder="Your Email" data-action="email-input">
-                <button type="button" data-target="form-submit">Submit</button>
-            </div>
-        </aside>
-    </main>
     <script>
-        document.querySelector('[data-target="form-submit"]').addEventListener('click', function() {
-            alert('Form submitted successfully!');
+        document.querySelector('[data-action="form-submit"]').addEventListener('click', function() {
+            alert('Thank you for signing up!');
         });
     </script>
 </body>

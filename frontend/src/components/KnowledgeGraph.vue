@@ -157,7 +157,11 @@ export default {
         });
       } catch (error) {
         console.error('知识点提取失败:', error);
-        alert('知识点提取失败: ' + (error.message || '未知错误'));
+        if (error.response && error.response.status) {
+          alert('知识点提取失败: HTTP错误 ' + error.response.status);
+        } else {
+          alert('知识点提取失败: ' + (error.message || '未知错误'));
+        }
       } finally {
         this.loading = false;
       }
@@ -175,17 +179,18 @@ export default {
           formData.append('file', this.uploadedFile);
           const response = await uploadAPI.extractKnowledgeFromFile(formData);
           knowledgeData = response.graph;
+          this.graphName = `知识点: ${this.uploadedFile.name}`;
         } else if (this.referenceUrl) {
           // 通过URL提取知识点
           const requestData = { reference_url: this.referenceUrl };
           const response = await knowledgeAPI.extractKnowledge(requestData);
           knowledgeData = response.graph;
+          this.graphName = `知识点: ${new URL(this.referenceUrl).hostname}`;
         } else {
           throw new Error('请选择一个文件或输入一个URL');
         }
         
         this.knowledgeGraph = knowledgeData;
-        this.graphName = this.referenceUrl ? `知识点: ${new URL(this.referenceUrl).hostname}` : `知识点: ${this.uploadedFile.name}`;
         
         // 通知父组件知识点已提取
         this.$emit('knowledge-extracted', {
@@ -194,7 +199,9 @@ export default {
         });
       } catch (error) {
         console.error('知识点提取失败:', error);
-        if (error.message) {
+        if (error.response && error.response.status) {
+          alert('知识点提取失败: HTTP错误 ' + error.response.status);
+        } else if (error.message) {
           alert('知识点提取失败: ' + error.message);
         } else {
           alert('知识点提取失败: ' + JSON.stringify(error));

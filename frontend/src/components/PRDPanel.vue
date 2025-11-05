@@ -153,7 +153,11 @@ export default {
         });
       } catch (error) {
         console.error('PRD生成失败:', error);
-        alert('PRD生成失败: ' + (error.message || '未知错误'));
+        if (error.response && error.response.status) {
+          alert('PRD生成失败: HTTP错误 ' + error.response.status);
+        } else {
+          alert('PRD生成失败: ' + (error.message || '未知错误'));
+        }
       } finally {
         this.loading = false;
       }
@@ -171,17 +175,18 @@ export default {
           formData.append('file', this.uploadedFile);
           const response = await uploadAPI.generatePRDFromFile(formData);
           prdData = response.prd_text;
+          this.prdTitle = `PRD: ${this.uploadedFile.name}`;
         } else if (this.referenceUrl) {
           // 通过URL生成PRD
           const requestData = { reference_url: this.referenceUrl };
           const response = await prdAPI.generatePRD(requestData);
           prdData = response.prd_text;
+          this.prdTitle = `PRD: ${new URL(this.referenceUrl).hostname}`;
         } else {
           throw new Error('请选择一个文件或输入一个URL');
         }
         
         this.prdContent = prdData;
-        this.prdTitle = this.referenceUrl ? `PRD: ${new URL(this.referenceUrl).hostname}` : `PRD: ${this.uploadedFile.name}`;
         
         // 通知父组件PRD已生成
         this.$emit('prd-generated', {
@@ -190,7 +195,9 @@ export default {
         });
       } catch (error) {
         console.error('PRD生成失败:', error);
-        if (error.message) {
+        if (error.response && error.response.status) {
+          alert('PRD生成失败: HTTP错误 ' + error.response.status);
+        } else if (error.message) {
           alert('PRD生成失败: ' + error.message);
         } else {
           alert('PRD生成失败: ' + JSON.stringify(error));

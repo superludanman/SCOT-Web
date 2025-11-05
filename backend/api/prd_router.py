@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 import os
 import json
 import uuid
@@ -10,8 +10,14 @@ from executor.execution_context import ExecutionContext
 
 prd_router = APIRouter()
 
+class ReferenceInfo(BaseModel):
+    title: str
+    structure: List[Dict[str, Any]]
+    text_blocks: List[str]
+
 class PRDGenerateRequest(BaseModel):
-    reference_url: str
+    reference_url: Optional[str] = None
+    reference_info: Optional[ReferenceInfo] = None
 
 class PRDGenerateResponse(BaseModel):
     prd_text: str
@@ -37,23 +43,42 @@ class PRDListResponse(BaseModel):
 @prd_router.post("/generate", response_model=PRDGenerateResponse)
 async def generate_prd(prd_request: PRDGenerateRequest):
     """
-    基于参考网站URL生成 PRD
+    基于参考网站URL或参考信息生成 PRD
     
     参数：
     - reference_url: 参考网站URL
+    - reference_info: 参考信息
     """
     try:
         # 初始化AI执行上下文
         context = ExecutionContext()
         slow_mind = SlowMind(context)
         
-        # 生成PRD内容
-        prd_text = slow_mind.generate_prd(prd_request.reference_url)
+        # 根据提供的参数生成PRD内容
+        if prd_request.reference_info:
+            # 基于参考信息生成PRD
+            # 创建一个模拟的对象来传递参考信息
+            class MockReference:
+                def __init__(self, info):
+                    self.title = info.title
+                    self.structure = info.structure
+                    self.text_blocks = info.text_blocks
+            
+            mock_ref = MockReference(prd_request.reference_info)
+            prd_text = slow_mind.generate_prd_from_info(mock_ref)
+        elif prd_request.reference_url:
+            # 基于URL生成PRD
+            prd_text = slow_mind.generate_prd(prd_request.reference_url)
+        else:
+            raise HTTPException(status_code=422, detail="必须提供参考URL或参考信息")
         
         return PRDGenerateResponse(
             prd_text=prd_text,
             status="success"
         )
+    except HTTPException:
+        # 重新抛出HTTP异常
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PRD生成失败: {str(e)}")
 

@@ -22,7 +22,7 @@
           <label>知识点图谱:</label>
           <div class="form-control">
             <p><strong>{{ knowledgeData.name }}</strong></p>
-            <p class="text-muted">知识点数量: {{ knowledgeData?.graph?.nodes?.length || 0 }} 个</p>
+            <p class="text-muted">知识点数量: {{ knowledgeData.graph?.nodes?.length || 0 }} 个</p>
           </div>
         </div>
         
@@ -107,8 +107,14 @@ export default {
       
       try {
         const requestData = {
-          prd: this.prdData,
-          knowledge_graph: this.knowledgeData?.graph || null,
+          prd: {
+            title: this.prdData.title,
+            content: this.prdData.content
+          },
+          knowledge_graph: {
+            name: this.knowledgeData.name,
+            graph: this.knowledgeData.graph
+          },
           user_note: this.userNote
         };
         
@@ -123,7 +129,11 @@ export default {
         });
       } catch (error) {
         console.error('网页生成失败:', error);
-        alert('网页生成失败: ' + (error.message || '未知错误'));
+        if (error.response && error.response.status) {
+          alert('网页生成失败: HTTP错误 ' + error.response.status);
+        } else {
+          alert('网页生成失败: ' + (error.message || '未知错误'));
+        }
       } finally {
         this.loading = false;
       }

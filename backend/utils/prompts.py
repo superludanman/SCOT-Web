@@ -235,7 +235,7 @@ placementHint: 指示元素在页面中的位置（如main-content、sidebar等�
 请基于参考网站的结构、布局、功能和样式推断可能的 HTML / CSS / JS 知识点，并完整输出 JSON。
     """
 
-def generate_demo_site_prompt(dependency_context=None, existing_code_context=None):
+def generate_demo_site_prompt(dependency_context=None, existing_code_context=None, user_goal: str = ""):
     return f"""
 你是一个资深的 Web 全栈开发专家，请根据以下任务说明、参考网页风格和前端技术知识点，生成结构清晰、可运行的 HTML 网站代码项目。最终效果应与用户提供的网站风格一致，并正确运用指定的前端技术点构建页面结构、样式与交互。
 
@@ -247,8 +247,7 @@ def generate_demo_site_prompt(dependency_context=None, existing_code_context=Non
 🎯 你必须实现以下关键点（不可遗漏）：
 
 1. 页面整体风格、结构布局、配色等尽量贴近参考网站。
-2. 使用以下前端技术点（基于知识点图谱自动选取合适位置嵌入）：
-{existing_code_context}
+2. 使用要求的前端技术点（基于知识点图谱自动选取合适位置嵌入）：
 3. 网站主题内容参考内容主题（例如介绍、活动、图片、表单等）。
 4. 页面需具备良好的用户体验与视觉吸引力。
 5. 所有功能使用原生 HTML/CSS/JS 实现（不使用框架，除非任务说明允许）。
@@ -276,6 +275,10 @@ def generate_demo_site_prompt(dependency_context=None, existing_code_context=Non
 ---
 📂 当前示例网站需包含的知识点：
 {existing_code_context or "（暂无已有文件）"}
+
+---
+🎯 用户的需求或目标说明（如果有）：
+{user_goal or "（用户未补充）"}
 
 ---
 

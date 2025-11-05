@@ -100,25 +100,29 @@ export default {
         this.$emit('upload-complete', result);
       } catch (error) {
         console.error('文件上传失败:', error);
-        alert('文件上传失败: ' + (error.message || '未知错误'));
+        if (error.response && error.response.status === 422) {
+          alert('文件上传失败: 请求参数错误，请检查文件格式');
+        } else {
+          alert('文件上传失败: ' + (error.message || '未知错误'));
+        }
       }
     },
     
     async handleUrlSubmit() {
       try {
-        // 对于URL，我们创建一个模拟的响应
-        const result = {
-          title: '从URL获取的页面',
-          structure: [{ tag: 'html', children: [] }],
-          text_blocks: [`从以下URL获取内容: ${this.url}`]
-        };
+        const formData = new FormData();
+        formData.append('url', this.url);
+        
+        const result = await uploadAPI.uploadHTML(formData);
         this.uploadResult = result;
         this.$emit('upload-complete', result);
-        // 自动触发下一步
-        this.proceedToPRD();
       } catch (error) {
         console.error('URL解析失败:', error);
-        alert('URL解析失败: ' + (error.message || '未知错误'));
+        if (error.response && error.response.status === 422) {
+          alert('URL解析失败: 请求参数错误');
+        } else {
+          alert('URL解析失败: ' + (error.message || '未知错误'));
+        }
       }
     },
     

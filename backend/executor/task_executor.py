@@ -28,15 +28,16 @@ class TaskExecutor:
         self.client = context.get_client("executor")
         self.model = context.get_model("executor")
 
-    def execute_task(self, dependency_context: str, existing_code_context: str) -> dict:
+    def execute_task(self, dependency_context: str, existing_code_context: str, user_goal: str = "") -> dict:
         """
         执行单个任务，生成结构化代码并保存到对应目录
         :param dependency_context: 参考网站信息
         :param existing_code_context: 知识点信息
+        :param user_goal: 用户目标
         :return: 执行结果描述字典
         """
        
-        prompt = generate_demo_site_prompt(dependency_context, existing_code_context)
+        prompt = generate_demo_site_prompt(dependency_context, existing_code_context,user_goal)
 
         try:
             response = self.client.chat.completions.create(

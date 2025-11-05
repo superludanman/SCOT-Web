@@ -75,7 +75,7 @@ def extract_html_structure(content: str) -> dict:
 
 @upload_router.post("/html", response_model=UploadResponse)
 async def upload_html(
-    file: UploadFile = File(...),
+    file: Optional[UploadFile] = File(None),
     url: Optional[str] = Form(None)
 ):
     """
@@ -89,7 +89,7 @@ async def upload_html(
     upload_dir = os.path.join("data", "uploads")
     os.makedirs(upload_dir, exist_ok=True)
     
-    if file:
+    if file and file.filename:
         # 保存上传的文件
         file_extension = Path(file.filename).suffix.lower()
         if file_extension not in [".html", ".htm"]:
@@ -127,7 +127,7 @@ async def upload_html(
         )
     
     else:
-        raise HTTPException(status_code=400, detail="请提供HTML文件或URL")
+        raise HTTPException(status_code=422, detail="请提供HTML文件或URL")
 
 @upload_router.post("/generate-prd", response_model=PRDGenerateResponse)
 async def generate_prd_from_file(file: UploadFile = File(...)):
@@ -138,35 +138,16 @@ async def generate_prd_from_file(file: UploadFile = File(...)):
     - file: HTML 文件
     """
     try:
-        # 保存上传的文件
-        upload_dir = os.path.join("data", "uploads")
-        os.makedirs(upload_dir, exist_ok=True)
-        
-        file_extension = Path(file.filename).suffix.lower()
-        if file_extension not in [".html", ".htm"]:
-            raise HTTPException(status_code=400, detail="只支持HTML文件")
-        
-        # 生成唯一文件名
-        unique_filename = f"{uuid.uuid4()}_{file.filename}"
-        file_path = os.path.join(upload_dir, unique_filename)
-        
-        # 保存文件
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        
-        # 读取文件内容
-        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-            content = f.read()
+        # 读取上传的文件内容
+        content = await file.read()
+        html_content = content.decode('utf-8')
         
         # 初始化AI执行上下文
         context = ExecutionContext()
         slow_mind = SlowMind(context)
         
-        # 提取结构信息
-        structure_info = extract_html_structure(content)
-        
-        # 生成PRD内容（这里简化为使用文件内容作为参考）
-        prd_text = slow_mind.generate_prd(file_path)
+        # 使用正确的函数生成PRD内容，传递HTML内容而不是文件路径
+        prd_text = slow_mind.generate_prd_from_html(html_content)
         
         return PRDGenerateResponse(
             prd_text=prd_text,
@@ -184,32 +165,16 @@ async def extract_knowledge_from_file(file: UploadFile = File(...)):
     - file: HTML 文件
     """
     try:
-        # 保存上传的文件
-        upload_dir = os.path.join("data", "uploads")
-        os.makedirs(upload_dir, exist_ok=True)
-        
-        file_extension = Path(file.filename).suffix.lower()
-        if file_extension not in [".html", ".htm"]:
-            raise HTTPException(status_code=400, detail="只支持HTML文件")
-        
-        # 生成唯一文件名
-        unique_filename = f"{uuid.uuid4()}_{file.filename}"
-        file_path = os.path.join(upload_dir, unique_filename)
-        
-        # 保存文件
-        with open(file_path, "wb") as buffer:
-            shutil.copyfileobj(file.file, buffer)
-        
-        # 读取文件内容
-        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
-            content = f.read()
+        # 读取上传的文件内容
+        content = await file.read()
+        html_content = content.decode('utf-8')
         
         # 初始化AI执行上下文
         context = ExecutionContext()
         fast_mind = FastMind(context)
         
-        # 提取知识点（这里简化为使用文件路径作为参考）
-        knowledge_data = fast_mind.extract_knowledge_points(file_path)
+        # 使用正确的函数提取知识点，传递HTML内容而不是文件路径
+        knowledge_data = fast_mind.extract_knowledge_points_from_html(html_content)
         
         return KnowledgeExtractResponse(
             graph=knowledge_data,
