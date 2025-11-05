@@ -7,6 +7,16 @@ export const uploadAPI = {
         return apiService.postForm('/api/upload/html', formData);
     },
 
+    // 从文件生成PRD
+    generatePRDFromFile: (formData) => {
+        return apiService.postForm('/api/upload/generate-prd', formData);
+    },
+
+    // 从文件提取知识点
+    extractKnowledgeFromFile: (formData) => {
+        return apiService.postForm('/api/upload/extract-knowledge', formData);
+    },
+
     // 获取上传文件列表
     listFiles: () => {
         return apiService.get('/api/upload/list');
@@ -43,6 +53,11 @@ export const prdAPI = {
 
 // 知识图谱相关API
 export const knowledgeAPI = {
+    // 提取知识点
+    extractKnowledge: (data) => {
+        return apiService.post('/api/knowledge/extract', data);
+    },
+
     // 保存知识图谱
     saveKnowledgeGraph: (data) => {
         return apiService.post('/api/knowledge/save', data);

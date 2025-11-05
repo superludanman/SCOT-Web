@@ -9,6 +9,19 @@ import datetime
 from utils.prompts import generate_demo_site_prompt
 from executor.execution_context import ExecutionContext
 
+# 检查是否存在已有的 PRD 文件
+def check_existing_prd():
+    prd_path = os.path.join("data", "prd", "html.txt")
+    return prd_path if os.path.exists(prd_path) else None
+
+# 加载知识点数据
+def load_knowledge_data(path: str = "data/knowledge/knowledge_graph.json") -> dict:
+    if not os.path.exists(path):
+        raise FileNotFoundError("未检测到知识点文件，请先生成知识点文件")
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
 class TaskExecutor:
     def __init__(self, context: ExecutionContext):
         self.context = context
@@ -36,7 +49,18 @@ class TaskExecutor:
             files = self._parse_code_blocks(raw)
             # 解析接口描述块
             interfaces = self._parse_interfaces_block(raw)
-            
+            # 所有代码集中写入 project 文件夹
+            task_dir = os.path.join("data", "results", "project")  
+            os.makedirs(task_dir, exist_ok=True)
+
+            for filename, code in files.items():
+                filepath = os.path.join(task_dir, filename)
+                os.makedirs(os.path.dirname(filepath), exist_ok=True)
+                with open(filepath, "w", encoding="utf-8") as f:
+                    f.write(code.strip())
+
+            print(f"示例网页生成完成，生成至 {task_dir}\n")
+
             result = {
                 "files": files,
                 "interfaces": interfaces,
@@ -46,7 +70,7 @@ class TaskExecutor:
             return result
 
         except Exception as e:
-            print(f"❌ 执行任务出错：{str(e)}")
+            print(f"执行任务出错：{str(e)}")
             return {"error": str(e)}
 
     def _parse_code_blocks(self, content: str) -> dict:

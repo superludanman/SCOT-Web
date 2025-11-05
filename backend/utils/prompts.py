@@ -1,9 +1,96 @@
 """
 Prompts模板：存放不同智能体的提示词模板
 """
-from utils.scraper import StyleScraper  # 导入抓取模块
 import asyncio
 
+def get_slow_mind_prompt_from_html(html_content: str, user_goal: str = ""):
+    return f"""
+你是一名资深前端架构师兼UI/UX设计顾问，请将用户上传的静态网页访问作为参考网站进行分析（结构、样式、交互）总结出可复用的设计与实现特征。
+生成一份**高精度**的技术文档，需包含所有视觉样式和布局的量化数据。供代码生成AI使用。 
+输出格式如下：
+
+---
+
+### <context>
+#### 1. Website Overview  
+[简要介绍参考网站的主题、目标用户群、主要用途和核心价值]
+
+#### 2. **Visual & Style Characteristics**  
+[总结视觉风格，包括：
+- **色彩搭配与主色调**（必须精确到十六进制或RGB值）：
+  - 主背景色: [如 `#f9f9f9`]
+  - 文字颜色: [如 `#333333`]
+  - 主色调/强调色: [如按钮色 `#4a90e2`]
+  - 边框颜色: [如 `#e0e0e0`]
+  - 悬停/交互状态颜色变化: [如 `darken(#4a90e2, 10%)`]
+- **字体选择与字号**：
+  - 主字体: [如 `"Arial", sans-serif`]
+  - 标题字号: [如 `h1: 2rem`, `h2: 1.5rem`]
+  - 正文字号/行高: [如 `16px/1.6`]
+- **组件风格（按钮、输入框、导航栏等）**：
+  - 按钮: [圆角大小 `4px`，内边距 `10px 20px`]
+  - 输入框: [边框粗细 `1px`，阴影 `0 2px 4px rgba(0,0,0,0.1)`]
+  - 导航栏: [高度 `60px`，背景色 `#ffffff`]
+- **图标、插画、图片风格**: [如尺寸比例 `16:9`，圆角 `8px`]
+- **动画与过渡效果**]
+
+#### 3. **Layout & Structure**  
+[总结网站整体布局特点，包括：
+- 页面结构（header / footer / 主体区域 / 侧边栏）
+- 布局类型: [如 `Flexbox` 或 `Grid`]
+- 间距系统: [如 `padding: 20px`，`margin-between-sections: 40px`]
+- 栅格参数: [如 `12列，间隔16px`]
+- 响应式适配方案: [如 `移动端: max-width 768px`]
+- 重要模块位置及占比]
+
+#### 4. **Interaction Patterns**  
+[分析用户交互方式，包括：
+- 导航交互
+- 按钮/链接的交互反馈
+- 表单或搜索框交互
+- 滚动与分页方式
+- 悬停效果: [如 `按钮背景色从 #4a90e2 变为 #3a7bc8`]
+- 过渡动画: [如 `transition: all 0.3s ease`]
+- 动效触发条件]
+
+#### 5. **Content Strategy ** 
+[总结内容类型与排版方式，包括：
+- 文本类型与信息层级
+- 图片与视频内容比例
+- 数据可视化或图表使用
+- CTA（Call to Action）的布局与策略]
+</context>
+
+<Analysis Doc>
+#### 1. **Technical Implementation Insights**  
+[推测可能的技术栈与实现方式，包括：
+- 前端框架 / UI 库
+- CSS 组织方式（如 BEM、Tailwind、SCSS）
+- 动画实现方式（CSS / JS / WebGL）
+- 组件化结构与复用思路]
+
+#### 2. **Component Inventory**  
+[列出主要可复用的组件，并描述：
+- 功能与作用
+- 样式特征
+- 推荐的封装方式]
+
+#### 3. **Example Page Blueprint** 
+[基于分析结果，抽象出一个简单的参考页面布局图或模块结构描述，便于AI生成演示网站]
+
+#### 4. **Risks & Considerations ** 
+[可能在复刻或参考中遇到的技术风险与注意事项，如版权问题、响应式适配复杂度、性能瓶颈等]
+</Analysis Doc>文档。
+
+🧱 用户上传的网页内容如下（HTML 原文）：
+<webpage>
+{html_content[:8000]}  # 控制长度，防止超长
+</webpage>
+
+🎯 用户的需求或目标说明（如果有）：
+{user_goal or "（用户未补充）"}
+
+"""
 
 def get_website_analysis_prompt(reference_url: str) -> str: #不使用抓取模块
     return f"""
@@ -87,6 +174,40 @@ def get_website_analysis_prompt(reference_url: str) -> str: #不使用抓取模�
 以下是参考网站链接：
 {reference_url}
 """
+
+def get_knowledge_points_prompt_from_html(html_content: str, user_goal: str = "") -> str:
+    return f"""
+你是一位前端教学内容分析专家，请将用户上传的静态网页访问作为参考网站进行分析，总结该网站涉及的前端开发知识点，并输出成严格的 JSON 格式，结构如下（必须严格遵守）：
+
+{{
+  "nodes": [
+    {{ "data": {{ "id": "chapter1", "label": "模块一:文本与页面结构基础", "category": "media-block", "placementHint": "main-content" }} }},
+    {{ "data": {{ "id": "text_paragraph", "label": "使用h元素和p元素体验标题与段落", "category": "media-block", "placementHint": "main-content"}} }},
+    {{ "data": {{ "id": "text_format", "label": "应用文本格式(加粗、斜体)", "category": "media-block", "placementHint": "main-content" }} }}
+    ...
+  ]
+}}
+字段说明：
+category: 将功能相似的元素分组（如所有媒体元素），暗示它们可以用相似的样式或容器来包装。
+placementHint: 指示元素在页面中的位置（如main-content、sidebar等），帮助生成代码时确定布局。
+⚠️ 要求：
+- 章节（chapterX）按知识点主题分组，每组下包含具体技能点
+- id 必须是英文+下划线格式（如 text_list_ul）
+- label 为中文，准确描述技能内容
+- 顺序由基础到进阶
+- 严禁输出多余说明或非 JSON 内容
+- 必须为 **合法 JSON**（用英文双引号）
+
+请基于参考网站的结构、布局、功能和样式推断可能的 HTML / CSS / JS 知识点，并完整输出 JSON。
+
+🧱 用户上传的网页内容如下（HTML 原文）：
+<webpage>
+{html_content[:8000]}  # 控制长度，防止超长
+</webpage>
+
+🎯 用户的需求或目标说明（如果有）：
+{user_goal or "（用户未补充）"}
+    """
 
 def get_knowledge_points_prompt(reference_url: str) -> str:
     return f"""

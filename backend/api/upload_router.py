@@ -7,6 +7,9 @@ from pathlib import Path
 import json
 import uuid
 from datetime import datetime
+from agents.slow_mind import SlowMind
+from agents.fast_mind import FastMind
+from executor.execution_context import ExecutionContext
 
 upload_router = APIRouter()
 
@@ -15,6 +18,14 @@ class UploadResponse(BaseModel):
     structure: List[Dict[str, Any]]
     text_blocks: List[str]
     message: str
+
+class PRDGenerateResponse(BaseModel):
+    prd_text: str
+    status: str
+
+class KnowledgeExtractResponse(BaseModel):
+    graph: dict
+    status: str
 
 class HTMLStructure(BaseModel):
     tag: str
@@ -117,6 +128,95 @@ async def upload_html(
     
     else:
         raise HTTPException(status_code=400, detail="请提供HTML文件或URL")
+
+@upload_router.post("/generate-prd", response_model=PRDGenerateResponse)
+async def generate_prd_from_file(file: UploadFile = File(...)):
+    """
+    通过上传的HTML文件生成PRD文档
+    
+    参数：
+    - file: HTML 文件
+    """
+    try:
+        # 保存上传的文件
+        upload_dir = os.path.join("data", "uploads")
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        file_extension = Path(file.filename).suffix.lower()
+        if file_extension not in [".html", ".htm"]:
+            raise HTTPException(status_code=400, detail="只支持HTML文件")
+        
+        # 生成唯一文件名
+        unique_filename = f"{uuid.uuid4()}_{file.filename}"
+        file_path = os.path.join(upload_dir, unique_filename)
+        
+        # 保存文件
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        # 读取文件内容
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+        
+        # 初始化AI执行上下文
+        context = ExecutionContext()
+        slow_mind = SlowMind(context)
+        
+        # 提取结构信息
+        structure_info = extract_html_structure(content)
+        
+        # 生成PRD内容（这里简化为使用文件内容作为参考）
+        prd_text = slow_mind.generate_prd(file_path)
+        
+        return PRDGenerateResponse(
+            prd_text=prd_text,
+            status="success"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"PRD生成失败: {str(e)}")
+
+@upload_router.post("/extract-knowledge", response_model=KnowledgeExtractResponse)
+async def extract_knowledge_from_file(file: UploadFile = File(...)):
+    """
+    通过上传的HTML文件提取知识点
+    
+    参数：
+    - file: HTML 文件
+    """
+    try:
+        # 保存上传的文件
+        upload_dir = os.path.join("data", "uploads")
+        os.makedirs(upload_dir, exist_ok=True)
+        
+        file_extension = Path(file.filename).suffix.lower()
+        if file_extension not in [".html", ".htm"]:
+            raise HTTPException(status_code=400, detail="只支持HTML文件")
+        
+        # 生成唯一文件名
+        unique_filename = f"{uuid.uuid4()}_{file.filename}"
+        file_path = os.path.join(upload_dir, unique_filename)
+        
+        # 保存文件
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+        
+        # 读取文件内容
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            content = f.read()
+        
+        # 初始化AI执行上下文
+        context = ExecutionContext()
+        fast_mind = FastMind(context)
+        
+        # 提取知识点（这里简化为使用文件路径作为参考）
+        knowledge_data = fast_mind.extract_knowledge_points(file_path)
+        
+        return KnowledgeExtractResponse(
+            graph=knowledge_data,
+            status="success"
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"知识点提取失败: {str(e)}")
 
 @upload_router.get("/list")
 async def list_uploaded_files():

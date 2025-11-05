@@ -1,0 +1,28 @@
+{
+  "nodes": [
+    {
+      "data": {
+        "id": "chapter1",
+        "label": "模块一:文本与页面结构基础",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "text_paragraph",
+        "label": "使用h元素和p元素体验标题与段落",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    },
+    {
+      "data": {
+        "id": "text_format",
+        "label": "应用文本格式(加粗、斜体)",
+        "category": "media-block",
+        "placementHint": "main-content"
+      }
+    }
+  ]
+}
