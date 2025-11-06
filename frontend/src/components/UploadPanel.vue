@@ -38,6 +38,8 @@
         <p><strong>文本块数量:</strong> {{ uploadResult.text_blocks?.length || 0 }}</p>
         <div class="actions">
           <button @click="proceedToPRD">生成PRD文档</button>
+          <button @click="proceedToKnowledge" class="ml-2">生成知识图谱</button>
+          <button @click="clearUpload" class="ml-2 btn-secondary">清除文件</button>
         </div>
       </div>
     </div>
@@ -58,7 +60,8 @@ export default {
   data() {
     return {
       url: '',
-      uploadResult: null
+      uploadResult: null,
+      uploadType: '' // 'file' 或 'url'
     };
   },
   watch: {
@@ -96,8 +99,16 @@ export default {
         formData.append('file', file);
         
         const result = await uploadAPI.uploadHTML(formData);
+        // 在参考数据中添加type属性
+        result.type = 'file';
+        result.file = file; // 保存文件对象
         this.uploadResult = result;
-        this.$emit('upload-complete', result);
+        this.uploadType = 'file'; // 标记为文件上传
+        this.$emit('upload-complete', { 
+          data: result, 
+          type: 'file',
+          file: file // 传递文件对象
+        });
       } catch (error) {
         console.error('文件上传失败:', error);
         if (error.response && error.response.status === 422) {
@@ -114,8 +125,16 @@ export default {
         formData.append('url', this.url);
         
         const result = await uploadAPI.uploadHTML(formData);
+        // 在参考数据中添加type属性
+        result.type = 'url';
+        result.url = this.url; // 保存URL
         this.uploadResult = result;
-        this.$emit('upload-complete', result);
+        this.uploadType = 'url'; // 标记为URL上传
+        this.$emit('upload-complete', { 
+          data: result, 
+          type: 'url',
+          url: this.url // 传递URL
+        });
       } catch (error) {
         console.error('URL解析失败:', error);
         if (error.response && error.response.status === 422) {
@@ -128,8 +147,35 @@ export default {
     
     proceedToPRD() {
       if (this.uploadResult) {
-        this.$emit('proceed-to-prd', this.uploadResult);
+        this.$emit('proceed-to-prd', { 
+          data: this.uploadResult,
+          type: this.uploadType
+        });
       }
+    },
+    
+    proceedToKnowledge() {
+      if (this.uploadResult) {
+        this.$emit('proceed-to-knowledge', { 
+          data: this.uploadResult,
+          type: this.uploadType
+        });
+      }
+    },
+    
+    clearUpload() {
+      // 清除上传结果
+      this.uploadResult = null;
+      this.uploadType = '';
+      this.url = '';
+      
+      // 清除文件输入
+      if (this.$refs.fileInput) {
+        this.$refs.fileInput.value = '';
+      }
+      
+      // 通知父组件清除上传数据
+      this.$emit('upload-cleared');
     }
   }
 };
@@ -229,5 +275,13 @@ export default {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.actions button.btn-secondary {
+  background-color: #d92222;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 </style>

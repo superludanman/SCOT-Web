@@ -57,18 +57,7 @@ async def extract_knowledge(extract_request: KnowledgeExtractRequest):
         fast_mind = FastMind(context)
         
         # 根据提供的参数提取知识点
-        if extract_request.reference_info:
-            # 基于参考信息提取知识点
-            # 创建一个模拟的对象来传递参考信息
-            class MockReference:
-                def __init__(self, info):
-                    self.title = info.title
-                    self.structure = info.structure
-                    self.text_blocks = info.text_blocks
-            
-            mock_ref = MockReference(extract_request.reference_info)
-            knowledge_data = fast_mind.extract_knowledge_points_from_info(mock_ref)
-        elif extract_request.reference_url:
+        if extract_request.reference_url:
             # 基于URL提取知识点
             knowledge_data = fast_mind.extract_knowledge_points(extract_request.reference_url)
         else:

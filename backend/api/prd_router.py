@@ -57,18 +57,7 @@ async def generate_prd(prd_request: PRDGenerateRequest):
         slow_mind = SlowMind(context)
         
         # 根据提供的参数生成PRD内容
-        if prd_request.reference_info:
-            # 基于参考信息生成PRD
-            # 创建一个模拟的对象来传递参考信息
-            class MockReference:
-                def __init__(self, info):
-                    self.title = info.title
-                    self.structure = info.structure
-                    self.text_blocks = info.text_blocks
-            
-            mock_ref = MockReference(prd_request.reference_info)
-            prd_text = slow_mind.generate_prd_from_info(mock_ref)
-        elif prd_request.reference_url:
+        if prd_request.reference_url:
             # 基于URL生成PRD
             prd_text = slow_mind.generate_prd(prd_request.reference_url)
         else:

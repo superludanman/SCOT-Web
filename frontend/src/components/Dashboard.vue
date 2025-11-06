@@ -35,12 +35,15 @@
         :initial-data="uploadData"
         @upload-complete="onUploadComplete"
         @proceed-to-prd="proceedToPRD"
+        @proceed-to-knowledge="proceedToKnowledge"
+        @upload-cleared="onUploadCleared"
       />
       
       <PRDPanel 
         v-if="currentStep === 2" 
         ref="prdPanel"
         :reference-data="referenceData"
+        :upload-type="uploadType"
         :prd-data="prdData"
         @prd-saved="onPRDSaved"
         @prd-generated="onPRDGenerated"
@@ -50,6 +53,7 @@
         v-if="currentStep === 3" 
         ref="knowledgeGraph"
         :reference-data="referenceData"
+        :upload-type="uploadType"
         :knowledge-data="knowledgeData"
         @knowledge-saved="onKnowledgeSaved"
         @knowledge-extracted="onKnowledgeExtracted"
@@ -120,18 +124,27 @@ export default {
     },
     
     onUploadComplete(data) {
-      this.uploadData = data;
-      this.referenceData = data;
+      this.uploadData = data.data;
+      this.referenceData = data.data;
+      this.uploadType = data.type;
       this.canProceed = true;
       console.log('上传完成，可以进行下一步');
     },
     
     proceedToPRD(data) {
-      this.uploadData = data;
-      this.referenceData = data;
+      this.uploadData = data.data;
+      this.referenceData = data.data;
       this.currentStep = 2;
       this.canProceed = false;
       console.log('进入PRD生成步骤');
+    },
+
+    proceedToKnowledge(data) {
+      this.uploadData = data.data;
+      this.referenceData = data.data;
+      this.currentStep = 3;
+      this.canProceed = false;
+      console.log('进入知识点提取步骤');
     },
     
     onPRDGenerated(data) {
@@ -202,7 +215,7 @@ export default {
   left: 0;
   right: 0;
   height: 2px;
-  background-color: var(--border-color);
+  background-color: #e0e0e0;
   z-index: 1;
 }
 
@@ -211,41 +224,36 @@ export default {
   flex-direction: column;
   align-items: center;
   z-index: 2;
-  transition: all 0.3s ease;
+  flex: 1;
 }
 
 .step-number {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: var(--light-color);
-  border: 2px solid var(--border-color);
+  background-color: #e0e0e0;
+  color: #666;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .step-title {
-  font-size: 0.9rem;
+  font-size: 14px;
+  color: #666;
   text-align: center;
-  color: var(--secondary-color);
 }
 
 .step.active .step-number {
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  background-color: #4a90e2;
   color: white;
 }
 
 .step.active .step-title {
-  color: var(--primary-color);
+  color: #4a90e2;
   font-weight: bold;
-}
-
-.step:hover:not(.active) .step-number {
-  background-color: #e9ecef;
 }
 
 .panels-container {
@@ -255,9 +263,10 @@ export default {
 .navigation {
   display: flex;
   justify-content: center;
+  gap: 10px;
 }
 
 .ml-2 {
-  margin-left: 1rem;
+  margin-left: 0.5rem;
 }
 </style>

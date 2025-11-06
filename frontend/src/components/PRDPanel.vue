@@ -11,7 +11,7 @@
         </div>
         
         <button 
-          @click="generatePRDFromReference" 
+          @click="generatePRD" 
           class="btn"
         >
           基于参考信息生成PRD文档
@@ -24,7 +24,8 @@
           <input 
             type="url" 
             id="referenceUrl" 
-            v-model="referenceUrl" 
+            :value="referenceUrlInput" 
+            @input="referenceUrlInput = $event.target.value"
             class="form-control" 
             placeholder="https://example.com"
           />
@@ -43,7 +44,7 @@
         
         <button 
           @click="generatePRD" 
-          :disabled="!referenceUrl && !uploadedFile" 
+          :disabled="!referenceUrlInput && !uploadedFileInput" 
           class="btn"
         >
           生成PRD文档
@@ -116,8 +117,8 @@ export default {
   },
   data() {
     return {
-      referenceUrl: '',
-      uploadedFile: null,
+      referenceUrlInput: '',
+      uploadedFileInput: null,
       prdContent: '',
       prdTitle: '',
       loading: false,
@@ -133,43 +134,22 @@ export default {
         }
       },
       immediate: true
+    },
+    referenceData: {
+      handler(newVal) {
+        if (newVal && newVal.url) {
+          this.referenceUrlInput = newVal.url;
+        }
+      },
+      immediate: true
     }
   },
   methods: {
     handleFileUpload(event) {
       const files = event.target.files;
       if (files.length > 0) {
-        this.uploadedFile = files[0];
-        this.referenceUrl = ''; // 清除URL输入
-      }
-    },
-    
-    async generatePRDFromReference() {
-      this.loading = true;
-      
-      try {
-        // 基于参考数据生成PRD
-        const response = await prdAPI.generatePRD({
-          reference_info: this.referenceData
-        });
-        
-        this.prdContent = response.prd_text;
-        this.prdTitle = `PRD: ${this.referenceData.title}`;
-        
-        // 通知父组件PRD已生成
-        this.$emit('prd-generated', {
-          content: response.prd_text,
-          title: `PRD: ${this.referenceData.title}`
-        });
-      } catch (error) {
-        console.error('PRD生成失败:', error);
-        if (error.response && error.response.status) {
-          alert('PRD生成失败: HTTP错误 ' + error.response.status);
-        } else {
-          alert('PRD生成失败: ' + (error.message || '未知错误'));
-        }
-      } finally {
-        this.loading = false;
+        this.uploadedFileInput = files[0];
+        this.referenceUrlInput = ''; // 清除URL输入
       }
     },
     
@@ -179,19 +159,46 @@ export default {
       try {
         let prdData;
         
-        if (this.uploadedFile) {
+        // 根据参考数据中的type属性调用不同的接口
+        if (this.referenceData && this.referenceData.type === 'file') {
           // 通过上传文件生成PRD
+          console.log("通过上传文件生成PRD");
           const formData = new FormData();
-          formData.append('file', this.uploadedFile);
+          formData.append('file', this.referenceData.file);
           const response = await uploadAPI.generatePRDFromFile(formData);
           prdData = response.prd_text;
-          this.prdTitle = `PRD: ${this.uploadedFile.name}`;
-        } else if (this.referenceUrl) {
+          this.prdTitle = `PRD: ${this.referenceData.file.name}`;
+        } else if (this.referenceData && this.referenceData.type === 'url') {
           // 通过URL生成PRD
-          const requestData = { reference_url: this.referenceUrl };
+          console.log("通过上传的URL生成PRD");
+          const requestData = { reference_url: this.referenceData.url };
           const response = await prdAPI.generatePRD(requestData);
           prdData = response.prd_text;
-          this.prdTitle = `PRD: ${new URL(this.referenceUrl).hostname}`;
+          this.prdTitle = `PRD: ${new URL(this.referenceData.url).hostname}`;
+        } else if (this.uploadedFileInput) {
+          // 通过当前选择的文件生成PRD
+          console.log("通过当前选择的文件生成PRD");
+          console.log("uploadedFileInput:", uploadedFileInput);
+          const formData = new FormData();
+          formData.append('file', this.uploadedFileInput);
+          const response = await uploadAPI.generatePRDFromFile(formData);
+          prdData = response.prd_text;
+          this.prdTitle = `PRD: ${this.uploadedFileInput.name}`;
+        } else if (this.referenceUrlInput) {
+          // 通过当前输入的URL生成PRD
+          console.log("通过当前输入的URL生成PRD");
+          console.log("referenceUrlInput:", referenceUrlInput);
+          const requestData = { reference_url: this.referenceUrlInput };
+          const response = await prdAPI.generatePRD(requestData);
+          prdData = response.prd_text;
+          this.prdTitle = `PRD: ${new URL(this.referenceUrlInput).hostname}`;
+        } else if (this.referenceData) {
+          // 基于参考数据生成PRD（当没有明确的上传类型时）
+          console.log("基于参考数据生成PRD（没有明确的上传类型）");
+          const requestData = { reference_info: this.referenceData };
+          const response = await prdAPI.generatePRD(requestData);
+          prdData = response.prd_text;
+          this.prdTitle = `PRD: ${this.referenceData.title}`;
         } else {
           throw new Error('请选择一个文件或输入一个URL');
         }
@@ -251,8 +258,8 @@ export default {
     },
     
     resetPRD() {
-      this.referenceUrl = '';
-      this.uploadedFile = null;
+      this.referenceUrlInput = '';
+      this.uploadedFileInput = null;
       this.prdContent = '';
       this.prdTitle = '';
       this.savedPRDId = null;
