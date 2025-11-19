@@ -178,25 +178,46 @@ def get_website_analysis_prompt(reference_url: str) -> str: #不使用抓取模�
 def get_knowledge_points_prompt_from_html(html_content: str, user_goal: str = "") -> str:
     return f"""
 你是一位前端教学内容分析专家，请将用户上传的静态网页访问作为参考网站进行分析，总结该网站涉及的前端开发知识点，并输出成严格的 JSON 格式，结构如下（必须严格遵守）：
+从中提炼出“模块（章节）”与“知识点（技能）”，  
+并输出**严格符合以下 JSON 模板结构的知识图谱**。
+
+输出 JSON 结构要求如下（必须严格遵守）：
 
 {{
   "nodes": [
-    {{ "data": {{ "id": "chapter1", "label": "模块一:文本与页面结构基础", "category": "media-block", "placementHint": "main-content" }} }},
-    {{ "data": {{ "id": "text_paragraph", "label": "使用h元素和p元素体验标题与段落", "category": "media-block", "placementHint": "main-content"}} }},
-    {{ "data": {{ "id": "text_format", "label": "应用文本格式(加粗、斜体)", "category": "media-block", "placementHint": "main-content" }} }}
+    {{ "data": {{ "id": "1_end", "label": "模块一: 文本与页面结构基础", "type": "chapter" }} }},
+    {{ "data": {{ "id": "1_1", "label": "使用 h 元素和 p 元素体验标题与段落", "type": "knowledge" }} }},
+    {{ "data": {{ "id": "1_2", "label": "应用文本格式 (加粗、斜体)", "type": "knowledge" }} }}
+    ...
+  ],
+  "edges": [
+    {{ "data": {{ "source": "1_end", "target": "2_end" }} }},
+    {{ "data": {{ "source": "1_end", "target": "1_1" }} }}
+    ...
+  ],
+  "dependent_edges": [
+    {{ "data": {{ "source": "1_end", "target": "2_end" }} }},
+    {{ "data": {{ "source": "1_end", "target": "1_1" }} }},
+    {{ "data": {{ "source": "1_1", "target": "1_2" }} }}
+    {{ "data": {{ "source": "2_end", "target": "2_1" }} }},
     ...
   ]
 }}
-字段说明：
-category: 将功能相似的元素分组（如所有媒体元素），暗示它们可以用相似的样式或容器来包装。
-placementHint: 指示元素在页面中的位置（如main-content、sidebar等），帮助生成代码时确定布局。
-⚠️ 要求：
-- 章节（chapterX）按知识点主题分组，每组下包含具体技能点
-- id 必须是英文+下划线格式（如 text_list_ul）
-- label 为中文，准确描述技能内容
-- 顺序由基础到进阶
-- 严禁输出多余说明或非 JSON 内容
-- 必须为 **合法 JSON**（用英文双引号）
+
+字段定义说明：
+- **nodes**：包含所有章节与知识点节点；
+  - `id`：章节编号或知识点编号，如 “1_end”、“2_1”；
+  - `label`：中文标题，清晰表达模块或技能名称；
+  - `type`：章节节点用 `"chapter"`，知识点节点用 `"knowledge"`。
+- **edges**：表示章节之间、章节与其下知识点之间的层级关系；
+- **dependent_edges**：表示知识点之间的逻辑依赖或学习顺序。
+
+⚙️ 要求：
+1. 所有章节应按知识主题分组，如“文本与结构”“样式与布局”“交互与脚本”等；
+2. 每个章节下需包含 3~5 个具体知识点；
+3. 知识点应从基础到进阶排列；
+4. 输出结果必须是 **合法 JSON（仅英文双引号）**；
+5. 严禁输出解释说明、注释或额外文本。
 
 请基于参考网站的结构、布局、功能和样式推断可能的 HTML / CSS / JS 知识点，并完整输出 JSON。
 
@@ -211,28 +232,50 @@ placementHint: 指示元素在页面中的位置（如main-content、sidebar等�
 
 def get_knowledge_points_prompt(reference_url: str) -> str:
     return f"""
-你是一位前端教学内容分析专家，请访问并分析以下参考网站（{reference_url}），总结该网站涉及的前端开发知识点，并输出成严格的 JSON 格式，结构如下（必须严格遵守）：
+你是一位专业的前端教学知识图谱构建专家。  
+请分析以下网站的内容、结构、样式和交互功能（{reference_url}），  
+从中提炼出“模块（章节）”与“知识点（技能）”，  
+并输出**严格符合以下 JSON 模板结构的知识图谱**。
+
+输出 JSON 结构要求如下（必须严格遵守）：
 
 {{
   "nodes": [
-    {{ "data": {{ "id": "chapter1", "label": "模块一:文本与页面结构基础", "category": "media-block", "placementHint": "main-content" }} }},
-    {{ "data": {{ "id": "text_paragraph", "label": "使用h元素和p元素体验标题与段落", "category": "media-block", "placementHint": "main-content"}} }},
-    {{ "data": {{ "id": "text_format", "label": "应用文本格式(加粗、斜体)", "category": "media-block", "placementHint": "main-content" }} }}
+    {{ "data": {{ "id": "1_end", "label": "模块一: 文本与页面结构基础", "type": "chapter" }} }},
+    {{ "data": {{ "id": "1_1", "label": "使用 h 元素和 p 元素体验标题与段落", "type": "knowledge" }} }},
+    {{ "data": {{ "id": "1_2", "label": "应用文本格式 (加粗、斜体)", "type": "knowledge" }} }}
+    ...
+  ],
+  "edges": [
+    {{ "data": {{ "source": "1_end", "target": "2_end" }} }},
+    {{ "data": {{ "source": "1_end", "target": "1_1" }} }}
+    ...
+  ],
+  "dependent_edges": [
+    {{ "data": {{ "source": "1_end", "target": "2_end" }} }},
+    {{ "data": {{ "source": "1_end", "target": "1_1" }} }},
+    {{ "data": {{ "source": "1_1", "target": "1_2" }} }}
+    {{ "data": {{ "source": "2_end", "target": "2_1" }} }},
     ...
   ]
 }}
-字段说明：
-category: 将功能相似的元素分组（如所有媒体元素），暗示它们可以用相似的样式或容器来包装。
-placementHint: 指示元素在页面中的位置（如main-content、sidebar等），帮助生成代码时确定布局。
-⚠️ 要求：
-- 章节（chapterX）按知识点主题分组，每组下包含具体技能点
-- id 必须是英文+下划线格式（如 text_list_ul）
-- label 为中文，准确描述技能内容
-- 顺序由基础到进阶
-- 严禁输出多余说明或非 JSON 内容
-- 必须为 **合法 JSON**（用英文双引号）
 
-请基于参考网站的结构、布局、功能和样式推断可能的 HTML / CSS / JS 知识点，并完整输出 JSON。
+字段定义说明：
+- **nodes**：包含所有章节与知识点节点；
+  - `id`：章节编号或知识点编号，如 “1_end”、“2_1”；
+  - `label`：中文标题，清晰表达模块或技能名称；
+  - `type`：章节节点用 `"chapter"`，知识点节点用 `"knowledge"`。
+- **edges**：表示章节之间、章节与其下知识点之间的层级关系；
+- **dependent_edges**：表示知识点之间的逻辑依赖或学习顺序。
+
+⚙️ 要求：
+1. 所有章节应按知识主题分组，如“文本与结构”“样式与布局”“交互与脚本”等；
+2. 每个章节下需包含 3~5 个具体知识点；
+3. 知识点应从基础到进阶排列；
+4. 输出结果必须是 **合法 JSON（仅英文双引号）**；
+5. 严禁输出解释说明、注释或额外文本。
+
+请你基于网站内容分析输出完整的 JSON 知识图谱结构。
     """
 
 def generate_demo_site_prompt(dependency_context=None, existing_code_context=None, user_goal: str = ""):
