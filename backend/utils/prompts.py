@@ -400,7 +400,7 @@ def generate_learning_content_prompt(topic_info: dict) -> str:
 
 生成要求：
 1. 必须返回纯 JSON，不要包含任何额外文本。
-2. description 字段中不允许出现标题格式（如“概念：”“说明：”等）。
+2. description 字段中不允许出现标题格式（如"概念：""说明："等）。
 3. 每个 description 必须直接以正文开头。
 4. 专业术语必须解释清楚，让零基础也能理解。
 5. 所有内容必须与前端开发及本知识点相关。
@@ -408,4 +408,93 @@ def generate_learning_content_prompt(topic_info: dict) -> str:
 7. 全部内容必须使用中文。
 """
 
+    return prompt
+
+def generate_test_task_prompt(topic_info: dict, learning_content: dict = None) -> str:
+    """
+    生成测试题的提示词
+    
+    Args:
+        topic_info (dict): 知识点信息
+        learning_content (dict): 学习内容
+        
+    Returns:
+        str: 生成的提示词
+    """
+    topic_id = topic_info.get("id", "")
+    label = topic_info.get("label", "")
+    select_elements = topic_info.get("select_element", [])
+    
+    # 构建学习内容描述
+    levels_description = ""
+    if learning_content and "levels" in learning_content:
+        for level in learning_content["levels"]:
+            levels_description += f"等级{level['level']}: {level['description']}\n"
+    
+    prompt = f'''
+你是一名资深的HTML编程出题专家，请基于以下信息为学生生成测试题和配套答案。
+
+【知识点标题】:
+{label}
+
+【学习内容】:
+{levels_description}
+
+【生成要求】:
+1. 你的输出必须是一个**合法的 JSON 对象**，不能包含 Markdown 代码块、注释或额外解释。
+2. JSON 开头必须是 {{，结尾必须是 }}。
+3. JSON 字段必须包含：
+   - topic_id（值为 "{topic_id}"）
+   - title（测试题标题）
+   - description_md（任务描述，Markdown 格式，分步骤说明）
+   - start_code（包含 html/css/js 的字典）
+   - checkpoints（列表，包含验证规则）
+   - answer（答案部分，包含完整的解答代码）
+
+4. 题目内容必须贴合"学习内容"
+5. 每个测试题至少包含 **3 个检查点**，覆盖不同类型（元素存在性、文本内容、位置/层级结构）。
+6. 任务要贴近真实网页开发场景，例如"个人网站介绍页""新闻文章页面"等。
+
+【检查点类型定义】:
+- **`assert_element`**: 检查元素是否存在。必需字段：`selector`, `assertion_type` (值为 "exists")
+- **`assert_style`**: 检查元素样式。必需字段：`selector`, `css_property`, `assertion_type` ("equals", "contains", "greater_than", "less_than"), `value`
+- **`assert_attribute`**: 检查元素属性。必需字段：`selector`, `attribute`, `assertion_type` ("exists", "equals", "contains"), `value` (可选)
+- **`assert_text_content`**: 检查文本内容。必需字段：`selector`, `assertion_type` ("equals", "contains", "matches_regex"), `value`
+- **`interaction_and_assert`**: 交互后断言。必需字段：`action_selector`, `action_type` ("click", "hover", "type_text"), `assertion` (嵌套断言对象)
+- **`custom_script`**: 自定义脚本。必需字段：script
+
+【答案部分要求】:
+- **`html`**: 完整的解答HTML代码
+- **`css`**: 完整的解答CSS样式代码（如果没有css代码，请设为空字符串""）
+- **`js`**: 完整的解答JavaScript代码（如果没有JavaScript代码，请设为空字符串""）
+
+【输出格式示例】:
+{{
+  "topic_id": "{topic_id}",
+  "title": "使用h元素和p元素体验标题与段落",
+  "description_md": "# 任务描述：\\n## 任务一：\\n请使用h1元素创建一个标题，内容为"我的第一个网页"的标题，并使用p元素创建一个段落，内容为"这是一个段落。"",
+  "start_code": {{
+    "html": "",
+    "css": "",
+    "js": ""
+  }},
+  "checkpoints": [
+    {{
+      "name": "h1元素存在检查",
+      "type": "assert_element",
+      "selector": "h1",
+      "assertion_type": "exists",
+      "feedback": "请在代码中添加一个h1元素。"
+    }}
+  ],
+  "answer": {{
+    "html": "<h1>我的第一个网页</h1>\\n<p>这是一个段落。</p>",
+    "css": "",
+    "js": ""
+  }}
+}}
+
+请基于学习内容中的知识点设计测试题和配套答案，确保题目内容宽泛且实用，适合初学者练习。答案部分要包含完整、正确的代码，能够通过所有检查点。
+'''
+    
     return prompt

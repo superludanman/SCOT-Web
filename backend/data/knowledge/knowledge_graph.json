@@ -26,32 +26,7 @@
     {
       "data": {
         "id": "1_2",
-        "label": "理解块级元素与内联元素的区别",
-        "type": "knowledge",
-        "select_element": [
-          "div",
-          "span"
-        ]
-      }
-    },
-    {
-      "data": {
-        "id": "1_3",
-        "label": "掌握常用的文本标记元素",
-        "type": "knowledge",
-        "select_element": [
-          "strong",
-          "em",
-          "u",
-          "s",
-          "small"
-        ]
-      }
-    },
-    {
-      "data": {
-        "id": "1_4",
-        "label": "使用列表元素创建有序列表与无序列表",
+        "label": "创建列表 (ul, ol)",
         "type": "knowledge",
         "select_element": [
           "ul",
@@ -62,12 +37,35 @@
     },
     {
       "data": {
-        "id": "1_5",
-        "label": "理解链接元素与图像元素的应用",
+        "id": "1_3",
+        "label": "插入图片与视频 (img, video)",
         "type": "knowledge",
         "select_element": [
-          "a",
-          "img"
+          "img",
+          "video"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "1_4",
+        "label": "使用超链接 (a)",
+        "type": "knowledge",
+        "select_element": [
+          "a"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "1_5",
+        "label": "创建表格 (table)",
+        "type": "knowledge",
+        "select_element": [
+          "table",
+          "tr",
+          "th",
+          "td"
         ]
       }
     },
@@ -81,30 +79,53 @@
     {
       "data": {
         "id": "2_1",
-        "label": "应用内联样式与内部样式表",
+        "label": "应用文本格式 (加粗、斜体)",
         "type": "knowledge",
         "select_element": [
-          "style"
+          "b",
+          "i",
+          "strong",
+          "em",
+          "u",
+          "s",
+          "mark",
+          "small",
+          "del",
+          "ins",
+          "sub",
+          "sup"
         ]
       }
     },
     {
       "data": {
         "id": "2_2",
-        "label": "掌握常用文本样式属性",
+        "label": "设置字体样式与大小",
         "type": "knowledge",
         "select_element": [
-          "color",
           "font-size",
+          "font-family",
           "font-weight",
-          "text-decoration"
+          "line-height"
         ]
       }
     },
     {
       "data": {
         "id": "2_3",
-        "label": "使用盒模型进行布局设计",
+        "label": "调整文本排列 (text-align)",
+        "type": "knowledge",
+        "select_element": [
+          "text-align",
+          "text-indent",
+          "text-decoration"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "2_4",
+        "label": "设计盒模型 (margin, padding, border)",
         "type": "knowledge",
         "select_element": [
           "margin",
@@ -115,25 +136,84 @@
     },
     {
       "data": {
-        "id": "2_4",
-        "label": "应用浮动和定位属性进行页面布局",
+        "id": "2_5",
+        "label": "使用浮动布局 (float)",
         "type": "knowledge",
         "select_element": [
           "float",
-          "position"
+          "clear"
         ]
       }
     },
     {
       "data": {
-        "id": "2_5",
-        "label": "掌握背景样式和渐变效果",
+        "id": "3_end",
+        "label": "模块三: JavaScript入门",
+        "type": "chapter"
+      }
+    },
+    {
+      "data": {
+        "id": "3_1",
+        "label": "理解变量与数据类型",
         "type": "knowledge",
         "select_element": [
-          "background-color",
-          "background-image",
-          "linear-gradient",
-          "radial-gradient"
+          "variable",
+          "number",
+          "string",
+          "boolean",
+          "array",
+          "object"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "3_2",
+        "label": "运用条件语句 (if, else)",
+        "type": "knowledge",
+        "select_element": [
+          "if",
+          "else",
+          "else if"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "3_3",
+        "label": "循环语句 (for, while)",
+        "type": "knowledge",
+        "select_element": [
+          "for",
+          "while",
+          "do while"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "3_4",
+        "label": "操作网页元素 (DOM)",
+        "type": "knowledge",
+        "select_element": [
+          "getElementById",
+          "getElementsByClassName",
+          "querySelector",
+          "querySelectorAll"
+        ]
+      }
+    },
+    {
+      "data": {
+        "id": "3_5",
+        "label": "处理事件处理器 (event)",
+        "type": "knowledge",
+        "select_element": [
+          "addEventListener",
+          "removeEventListener",
+          "event.target",
+          "event.preventDefault"
         ]
       }
     }
@@ -198,6 +278,36 @@
         "source": "2_end",
         "target": "2_5"
       }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_1"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_2"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_3"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_4"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_5"
+      }
     }
   ],
   "dependent_edges": [
@@ -247,6 +357,30 @@
       "data": {
         "source": "2_4",
         "target": "2_5"
+      }
+    },
+    {
+      "data": {
+        "source": "3_1",
+        "target": "3_2"
+      }
+    },
+    {
+      "data": {
+        "source": "3_2",
+        "target": "3_3"
+      }
+    },
+    {
+      "data": {
+        "source": "3_3",
+        "target": "3_4"
+      }
+    },
+    {
+      "data": {
+        "source": "3_4",
+        "target": "3_5"
       }
     }
   ]

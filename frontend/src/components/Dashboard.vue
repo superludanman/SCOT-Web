@@ -10,17 +10,22 @@
       
       <div class="step" :class="{ 'active': currentStep === 2 }" @click="goToStep(2)">
         <div class="step-number">2</div>
-        <div class="step-title">生成PRD文档</div>
+        <div class="step-title">生成设计文档</div>
       </div>
       
       <div class="step" :class="{ 'active': currentStep === 3 }" @click="goToStep(3)">
         <div class="step-number">3</div>
-        <div class="step-title">提取知识点</div>
+        <div class="step-title">生成学习路径</div>
       </div>
       
       <div class="step" :class="{ 'active': currentStep === 3.5 }" @click="goToStep(3.5)" v-if="showLearningStep">
         <div class="step-number">-</div>
-        <div class="step-title">学习知识点</div>
+        <div class="step-title">渐进式知识展示</div>
+      </div>
+      
+      <div class="step" :class="{ 'active': currentStep === 3.7 }" @click="goToStep(3.7)" v-if="showTestTaskStep">
+        <div class="step-number">-</div>
+        <div class="step-title">生成实践案例</div>
       </div>
       
       <div class="step" :class="{ 'active': currentStep === 4 }" @click="goToStep(4)">
@@ -69,6 +74,14 @@
         v-else-if="currentStep === 3.5"
         :knowledge-node="learningNode"
         @back-to-graph="backToKnowledgeGraph"
+        @view-test-task="onViewTestTask"
+      />
+      
+      <TestTaskDisplay
+        v-else-if="currentStep === 3.7"
+        :test-task="testTask"
+        :loading="testTaskLoading"
+        @back-to-learning="backToLearningContent"
       />
       
       <GeneratePanel 
@@ -85,7 +98,7 @@
       />
     </div>
     
-    <div class="navigation mt-4" v-if="currentStep > 1 && currentStep !== 3.5">
+    <div class="navigation mt-4" v-if="currentStep > 1 && currentStep !== 3.5 && currentStep !== 3.7">
       <button @click="prevStep" class="btn btn-secondary">上一步</button>
       <button 
         v-if="currentStep < 5" 
@@ -100,6 +113,10 @@
     <div class="navigation mt-4" v-else-if="currentStep === 3.5">
       <button @click="backToKnowledgeGraph" class="btn btn-secondary">返回知识点图谱</button>
     </div>
+    
+    <div class="navigation mt-4" v-else-if="currentStep === 3.7">
+      <button @click="backToLearningContent" class="btn btn-secondary">返回学习内容</button>
+    </div>
   </div>
 </template>
 
@@ -108,8 +125,10 @@ import UploadPanel from './UploadPanel.vue';
 import PRDPanel from './PRDPanel.vue';
 import KnowledgeGraph from './KnowledgeGraph.vue';
 import LearningContent from './LearningContent.vue';
+import TestTaskDisplay from './TestTaskDisplay.vue';
 import GeneratePanel from './GeneratePanel.vue';
 import PreviewPane from './PreviewPane.vue';
+import { testGenerationAPI } from '../api/index.js';
 
 export default {
   name: 'Dashboard',
@@ -118,6 +137,7 @@ export default {
     PRDPanel,
     KnowledgeGraph,
     LearningContent,
+    TestTaskDisplay,
     GeneratePanel,
     PreviewPane
   },
@@ -131,13 +151,16 @@ export default {
       generatedTaskId: '',    // 生成任务ID
       canProceed: false,
       showLearningStep: false, // 是否显示学习步骤
-      learningNode: null      // 当前学习的知识点节点
+      showTestTaskStep: false, // 是否显示测试题步骤
+      learningNode: null,     // 当前学习的知识点节点
+      testTask: null,         // 当前测试题
+      testTaskLoading: false  // 测试题加载状态
     };
   },
   methods: {
     goToStep(step) {
       // 允许用户点击步骤标题导航到对应步骤
-      if ((step <= 5 && step >= 1) || step === 3.5) {
+      if ((step <= 5 && step >= 1) || step === 3.5 || step === 3.7) {
         this.currentStep = step;
         this.canProceed = false;
       }
@@ -194,10 +217,47 @@ export default {
       console.log('进入学习知识点模块');
     },
     
+    onViewTestTask(data) {
+      // 生成测试题并跳转到测试题显示模块
+      this.showTestTaskStep = true;
+      this.currentStep = 3.7;
+      this.testTask = null;
+      this.testTaskLoading = true;
+      
+      // 调用后端API生成测试题
+      this.generateTestTask(data);
+    },
+    
+    async generateTestTask(data) {
+      try {
+        const requestData = {
+          topic_id: data.knowledgeNode.id,
+          knowledge_node: data.knowledgeNode,
+          learning_content: data.learningContent
+        };
+        
+        const response = await testGenerationAPI.generateTestTask(requestData);
+        this.testTask = response;
+      } catch (error) {
+        console.error('生成测试题失败:', error);
+        alert('生成测试题失败: ' + (error.message || '未知错误'));
+      } finally {
+        this.testTaskLoading = false;
+      }
+    },
+    
     backToKnowledgeGraph() {
       this.currentStep = 3;
       this.learningNode = null;
+      this.showLearningStep = false;
       console.log('返回知识点图谱');
+    },
+    
+    backToLearningContent() {
+      this.currentStep = 3.5;
+      this.testTask = null;
+      this.showTestTaskStep = false;
+      console.log('返回学习内容');
     },
     
     onWebsiteGenerated(data) {

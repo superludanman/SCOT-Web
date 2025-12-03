@@ -97,6 +97,14 @@ export const learningAPI = {
     }
 };
 
+// 测试题生成相关API
+export const testGenerationAPI = {
+    // 生成测试题
+    generateTestTask: (data) => {
+        return apiService.post('/api/test/generate-test-task', data);
+    }
+};
+
 // 执行器相关API
 export const executorAPI = {
     // 执行任务

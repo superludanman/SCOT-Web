@@ -27,6 +27,11 @@
           </div>
         </div>
       </div>
+      
+      <!-- 添加查看测试题按钮 -->
+      <div class="test-task-button-container">
+        <button @click="viewTestTask" class="btn btn-primary">查看测试题</button>
+      </div>
     </div>
     
     <div v-else class="no-content">
@@ -81,6 +86,14 @@ export default {
     
     goBack() {
       this.$emit('back-to-graph');
+    },
+    
+    viewTestTask() {
+      // 通知父组件跳转到测试题模块
+      this.$emit('view-test-task', {
+        knowledgeNode: this.knowledgeNode,
+        learningContent: this.learningContent
+      });
     }
   }
 };
@@ -147,4 +160,14 @@ export default {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+.test-task-button-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.test-task-content {
+  margin-top: 20px;
+}
+
 </style>

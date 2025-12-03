@@ -3,171 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WCF Best Cat - Cat Exhibition</title>
+    <title>WCF Best Cat</title>
     <style>
         body {
-            background-color: #f7f4ed;
-            color: #333333;
-            font-family: "Roboto", sans-serif;
-            line-height: 1.6;
+            font-family: "Helvetica Neue", Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            background-color: #ffffff;
+            color: #333333;
         }
-        h1, h2, h3 {
-            color: #b88a44;
+        a {
+            text-decoration: none;
+            color: #ff6600;
+            transition: all 0.3s ease-in-out;
         }
-        h1 { font-size: 2.5rem; }
-        h2 { font-size: 2rem; }
-        h3 { font-size: 1.5rem; }
-
-        /* Layout */
-        .container {
+        a:hover {
+            color: #e55c00;
+        }
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #dddddd;
+            position: fixed;
+            width: 100%;
+            height: 70px;
+            top: 0;
+            z-index: 1000;
             display: flex;
-            min-height: 100vh;
-            padding: 20px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .main {
+        main {
+            margin-top: 70px;
+            display: flex;
+            padding: 15px;
+            gap: 20px;
+        }
+        .main-content, .sidebar {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 16px;
+        }
+        .main-content {
             flex: 0 0 70%;
-            padding: 20px;
         }
         .sidebar {
             flex: 0 0 30%;
-            padding: 20px;
         }
-
-        /* Media and Gallery */
-        .media-container {
-            background-color: #fff;
-            padding: 16px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+        h1, h2 {
+            color: #0066cc; /* 蓝色标题 */
+            margin-top: 0;
         }
         #media_image_image {
             width: 100%;
-            display: block;
-            border-radius: 6px;
-            transition: transform 0.3s ease;
-        }
-        #media_image_image:hover {
-            transform: scale(1.05);
-        }
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-        }
-        .gallery img {
-            width: 100%;
-            border-radius: 6px;
-            transition: transform 0.3s ease;
-        }
-        .gallery img:hover {
-            transform: scale(1.05);
-        }
-
-        /* List Styles */
-        #text_list_ol_events, 
-        #text_list_ul_schedule {
-            padding: 0;
-            list-style: none;
+            border-radius: 10px;
             margin-bottom: 20px;
         }
-        #text_list_ol_events li,
-        #text_list_ul_schedule li {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #e0e0e0;
+        .gallery {
+            display: flex;
+            gap: 10px;
         }
-
-        /* Form Styles */
-        form {
-            margin-top: 20px;
+        .gallery img {
+            flex: 1;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 10px;
         }
-        input[type="text"], input[type="email"] {
-            width: calc(100% - 26px);
-            padding: 12px;
-            margin-bottom: 12px;
-            border: 2px solid #e0e0e0;
+        .media-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        #media_video_video, #media_audio_track {
+            width: 100%;
+            border-radius: 8px;
+        }
+        ol, ul {
+            padding: 0;
+            list-style-type: none;
+        }
+        ol li, ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid #dddddd;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border: 1px solid #dddddd;
             border-radius: 5px;
-            transition: border-color 0.3s ease;
+            transition: all 0.3s ease;
         }
-        input[type="text"]:focus, input[type="email"]:focus {
-            border-color: #b88a44;
+        input:focus {
+            border-color: #ff6600;
+            outline: none;
         }
         button {
-            background-color: #b88a44;
-            color: #ffffff;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
+            background-color: #ff6600;
+            color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease;
         }
         button:hover {
-            background-color: #9a7630;
+            background-color: #e55c00;
+        }
+        @media (max-width: 768px) {
+            main {
+                flex-direction: column;
+            }
+            .main-content, .sidebar {
+                flex: none;
+                width: 100%;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="main">
-            <h1 id="text_paragraph_title">Welcome to the WCF Best Cat Exhibition</h1>
-            <p>Explore the wonderful world of feline friends and discover amazing cat breeds from all around the world.</p>
 
-            <div class="media-container">
-                <img id="media_image_image" src="https://via.placeholder.com/800x600" alt="Main Cat Image">
-                <div class="gallery">
-                    <img src="https://via.placeholder.com/150" alt="Cat Thumbnail 1">
-                    <img src="https://via.placeholder.com/150" alt="Cat Thumbnail 2">
-                    <img src="https://via.placeholder.com/150" alt="Cat Thumbnail 3">
-                </div>
-            </div>
+<header>
+    <nav>
+        <a href="#">Home</a> | <a href="#">Events</a> | <a href="#">Contacts</a>
+    </nav>
+</header>
 
-            <h2>Upcoming Events</h2>
-            <ol id="text_list_ol_events">
-                <li>Cat Beauty Contest</li>
-                <li>Interactive Cat Show</li>
-                <li>Pet Adoption Day</li>
-            </ol>
-            
-            <h3>Schedule</h3>
-            <ul id="text_list_ul_schedule">
-                <li>Opening Ceremony - 9:00AM</li>
-                <li>Guest Speaker: Dr. Whiskers - 11:00AM</li>
-                <li>Cuddle Session - 2:00PM</li>
-            </ul>
-
-            <form>
-                <h3>Sign Up for Updates</h3>
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email" placeholder="Your Email" required>
-                <div>
-                    <input type="checkbox" id="newsletter">
-                    <label for="newsletter">Subscribe for newsletter</label>
-                </div>
-                <button type="button" data-action="form-submit">Submit</button>
-            </form>
-        </div>
-        
-        <div class="sidebar">
-            <div class="media-container">
-                <video id="media_video_video" controls width="100%">
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <audio id="media_audio_track" controls width="100%">
-                    <source src="https://www.w3schools.com/html/horse.mp3" type="audio/mp3">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
+<main>
+    <div class="main-content">
+        <h1>WCF Best Cat Showcase</h1>
+        <img id="media_image_image" src="https://via.placeholder.com/800x400" alt="Main Cat">
+        <h2>Image Gallery</h2>
+        <div class="gallery">
+            <img src="https://via.placeholder.com/150" alt="Cat 1">
+            <img src="https://via.placeholder.com/150" alt="Cat 2">
+            <img src="https://via.placeholder.com/150" alt="Cat 3">
         </div>
     </div>
 
-    <script>
-        document.querySelector('[data-action="form-submit"]').addEventListener('click', function() {
-            alert('Thank you for signing up!');
-        });
-    </script>
+    <aside class="sidebar">
+        <h2>Media</h2>
+        <div class="media-container">
+            <audio id="media_audio_track" controls>
+                <source src="https://via.placeholder.com/audio.mp3" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+            <video id="media_video_video" controls>
+                <source src="https://via.placeholder.com/video.mp4" type="video/mp4">
+                Your browser does not support the video element.
+            </video>
+        </div>
+        
+        <h2>Upcoming Events</h2>
+        <ol id="text_list_ol_events">
+            <li>Spring Cat Show</li>
+            <li>Summer Cat Extravaganza</li>
+            <li>Autumn Feline Expo</li>
+        </ol>
+
+        <h2>Schedule</h2>
+        <ul id="text_list_ul_schedule">
+            <li>March - London</li>
+            <li>June - Paris</li>
+            <li>September - Tokyo</li>
+        </ul>
+
+        <h2>Contact Us</h2>
+        <form id="contact_form">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <button type="submit" data-action="form-submit">Submit</button>
+        </form>
+    </aside>
+</main>
+
+<script>
+    document.getElementById('contact_form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        alert('Form submitted!');
+    });
+</script>
+
 </body>
 </html>
