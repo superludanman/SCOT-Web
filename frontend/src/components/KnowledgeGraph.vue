@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h2 class="card-title">知识点图谱</h2>
+    <h2 class="card-title">生成学习路径</h2>
     
     <div v-if="!knowledgeGraph">
       <div v-if="referenceData">
@@ -14,7 +14,7 @@
           @click="extractKnowledge" 
           class="btn"
         >
-          基于参考信息提取知识点
+          基于参考信息生成学习路径
         </button>
       </div>
       
@@ -47,13 +47,13 @@
           :disabled="!referenceUrlInput && !uploadedFileInput" 
           class="btn"
         >
-          提取知识点
+          生成学习路径
         </button>
       </div>
       
       <div v-if="loading" class="mt-3 text-center">
         <div class="spinner"></div>
-        <p class="mt-2">正在提取知识点...</p>
+        <p class="mt-2">正在生成学习路径...</p>
       </div>
     </div>
     
@@ -122,7 +122,7 @@
       
       <div class="d-flex justify-content-between">
         <div>
-          <button @click="resetKnowledge" class="btn btn-secondary">重新提取</button>
+          <button @click="resetKnowledge" class="btn btn-secondary">重新生成</button>
           <button 
             v-if="savedKnowledgeId" 
             @click="downloadKnowledgeGraph" 

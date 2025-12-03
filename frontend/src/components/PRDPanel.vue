@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h2 class="card-title">PRD文档生成</h2>
+    <h2 class="card-title">设计文档生成</h2>
     
     <div v-if="!prdContent">
       <div v-if="referenceData">
@@ -14,7 +14,7 @@
           @click="generatePRD" 
           class="btn"
         >
-          基于参考信息生成PRD文档
+          基于参考信息生成设计文档
         </button>
       </div>
       
@@ -47,7 +47,7 @@
           :disabled="!referenceUrlInput && !uploadedFileInput" 
           class="btn"
         >
-          生成PRD文档
+          生成设计文档
         </button>
       </div>
       
@@ -59,11 +59,11 @@
     
     <div v-else>
       <div class="alert alert-success">
-        PRD文档生成成功！
+        设计文档生成成功！
       </div>
       
       <div class="form-group">
-        <label for="prdTitle">PRD标题:</label>
+        <label for="prdTitle">设计文档标题:</label>
         <input 
           type="text" 
           id="prdTitle" 
@@ -74,7 +74,7 @@
       </div>
       
       <div class="form-group">
-        <label>PRD内容:</label>
+        <label>设计文档内容:</label>
         <textarea 
           class="form-control" 
           rows="15" 
@@ -91,10 +91,10 @@
             @click="downloadPRD" 
             class="btn btn-info ml-2"
           >
-            下载PRD
+            下载设计文档
           </button>
         </div>
-        <button @click="savePRD" class="btn btn-success" :disabled="!prdTitle">保存PRD</button>
+        <button @click="savePRD" class="btn btn-success" :disabled="!prdTitle">保存设计文档</button>
       </div>
     </div>
   </div>

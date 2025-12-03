@@ -1,0 +1,291 @@
+{
+  "id": "368df497-c9be-4cb5-8bbd-bcb965b7385c",
+  "name": "知识点: www.wcf-bestcat.de",
+  "graph": {
+    "nodes": [
+      {
+        "data": {
+          "id": "1_end",
+          "label": "模块一: HTML基础",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "1_1",
+          "label": "了解HTML标记语言与页面结构",
+          "type": "knowledge",
+          "select_element": [
+            "html",
+            "head",
+            "body",
+            "title",
+            "meta"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "1_2",
+          "label": "使用 h 元素和 p 元素体验标题与段落",
+          "type": "knowledge",
+          "select_element": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "p"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "1_3",
+          "label": "理解块级元素与行内元素的区别",
+          "type": "knowledge",
+          "select_element": [
+            "div",
+            "span"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "1_4",
+          "label": "掌握基础文本格式化方法",
+          "type": "knowledge",
+          "select_element": [
+            "em",
+            "strong",
+            "b",
+            "i"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_end",
+          "label": "模块二: CSS基础",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "2_1",
+          "label": "认识CSS样式表与样式规则",
+          "type": "knowledge",
+          "select_element": [
+            "style",
+            "link"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_2",
+          "label": "学习CSS选择器与基本属性",
+          "type": "knowledge",
+          "select_element": [
+            "id",
+            "class",
+            "tag",
+            "attribute"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_3",
+          "label": "熟悉CSS盒模型与布局",
+          "type": "knowledge",
+          "select_element": [
+            "margin",
+            "padding",
+            "border",
+            "width",
+            "height"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_4",
+          "label": "掌握CSS文本与字体样式",
+          "type": "knowledge",
+          "select_element": [
+            "font-family",
+            "font-size",
+            "text-align"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "3_end",
+          "label": "模块三: JavaScript入门",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "3_1",
+          "label": "认识JavaScript脚本语言与基本语法",
+          "type": "knowledge",
+          "select_element": [
+            "variables",
+            "functions",
+            "loops",
+            "conditionals"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "3_2",
+          "label": "学习DOM操作与事件处理",
+          "type": "knowledge",
+          "select_element": [
+            "document",
+            "getElementById",
+            "addEventListener"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "3_3",
+          "label": "掌握JavaScript数据类型与运算",
+          "type": "knowledge",
+          "select_element": [
+            "string",
+            "number",
+            "boolean",
+            "array",
+            "object"
+          ]
+        }
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_1"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_2"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_3"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_4"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_1"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_2"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_3"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_4"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "3_1"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "3_2"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "3_3"
+        }
+      }
+    ],
+    "dependent_edges": [
+      {
+        "data": {
+          "source": "1_1",
+          "target": "1_2"
+        }
+      },
+      {
+        "data": {
+          "source": "1_2",
+          "target": "1_3"
+        }
+      },
+      {
+        "data": {
+          "source": "1_3",
+          "target": "1_4"
+        }
+      },
+      {
+        "data": {
+          "source": "2_1",
+          "target": "2_2"
+        }
+      },
+      {
+        "data": {
+          "source": "2_2",
+          "target": "2_3"
+        }
+      },
+      {
+        "data": {
+          "source": "2_3",
+          "target": "2_4"
+        }
+      },
+      {
+        "data": {
+          "source": "3_1",
+          "target": "3_2"
+        }
+      },
+      {
+        "data": {
+          "source": "3_2",
+          "target": "3_3"
+        }
+      }
+    ]
+  },
+  "created_at": "2025-12-03T22:32:50.561340"
+}

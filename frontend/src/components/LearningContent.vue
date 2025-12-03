@@ -30,7 +30,7 @@
       
       <!-- 添加查看测试题按钮 -->
       <div class="test-task-button-container">
-        <button @click="viewTestTask" class="btn btn-primary">查看测试题</button>
+        <button @click="viewTestTask" class="btn btn-primary">生成实践案例</button>
       </div>
     </div>
     

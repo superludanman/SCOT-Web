@@ -37,7 +37,7 @@
         <p><strong>页面标题:</strong> {{ uploadResult.title }}</p>
         <p><strong>文本块数量:</strong> {{ uploadResult.text_blocks?.length || 0 }}</p>
         <div class="actions">
-          <button @click="proceedToPRD">生成PRD文档</button>
+          <button @click="proceedToPRD">生成设计文档</button>
           <button @click="proceedToKnowledge" class="ml-2">生成知识图谱</button>
           <button @click="clearUpload" class="ml-2 btn-secondary">清除文件</button>
         </div>

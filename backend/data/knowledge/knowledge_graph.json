@@ -10,15 +10,14 @@
     {
       "data": {
         "id": "1_1",
-        "label": "使用 h 元素和 p 元素体验标题与段落",
+        "label": "HTML元素与结构",
         "type": "knowledge",
         "select_element": [
-          "h1",
-          "h2",
-          "h3",
-          "h4",
-          "h5",
-          "h6",
+          "html",
+          "head",
+          "body",
+          "div",
+          "span",
           "p"
         ]
       }
@@ -26,45 +25,39 @@
     {
       "data": {
         "id": "1_2",
-        "label": "创建列表 (ul, ol)",
+        "label": "文本格式化",
         "type": "knowledge",
         "select_element": [
-          "ul",
-          "ol",
-          "li"
+          "h1",
+          "h2",
+          "p",
+          "strong",
+          "em"
         ]
       }
     },
     {
       "data": {
         "id": "1_3",
-        "label": "插入图片与视频 (img, video)",
+        "label": "超链接与图片",
         "type": "knowledge",
         "select_element": [
-          "img",
-          "video"
+          "a",
+          "img"
         ]
       }
     },
     {
       "data": {
         "id": "1_4",
-        "label": "使用超链接 (a)",
+        "label": "列表与表格",
         "type": "knowledge",
         "select_element": [
-          "a"
-        ]
-      }
-    },
-    {
-      "data": {
-        "id": "1_5",
-        "label": "创建表格 (table)",
-        "type": "knowledge",
-        "select_element": [
+          "ul",
+          "ol",
+          "li",
           "table",
           "tr",
-          "th",
           "td"
         ]
       }
@@ -79,67 +72,52 @@
     {
       "data": {
         "id": "2_1",
-        "label": "应用文本格式 (加粗、斜体)",
+        "label": "CSS选择器与样式",
         "type": "knowledge",
         "select_element": [
-          "b",
-          "i",
-          "strong",
-          "em",
-          "u",
-          "s",
-          "mark",
-          "small",
-          "del",
-          "ins",
-          "sub",
-          "sup"
+          "class",
+          "id",
+          "tag",
+          "attribute",
+          "descendant"
         ]
       }
     },
     {
       "data": {
         "id": "2_2",
-        "label": "设置字体样式与大小",
+        "label": "盒模型与布局",
         "type": "knowledge",
         "select_element": [
-          "font-size",
-          "font-family",
-          "font-weight",
-          "line-height"
+          "margin",
+          "padding",
+          "border",
+          "width",
+          "height",
+          "display"
         ]
       }
     },
     {
       "data": {
         "id": "2_3",
-        "label": "调整文本排列 (text-align)",
+        "label": "字体与颜色",
         "type": "knowledge",
         "select_element": [
-          "text-align",
-          "text-indent",
-          "text-decoration"
+          "font-family",
+          "font-size",
+          "color",
+          "background-color"
         ]
       }
     },
     {
       "data": {
         "id": "2_4",
-        "label": "设计盒模型 (margin, padding, border)",
+        "label": "定位与浮动",
         "type": "knowledge",
         "select_element": [
-          "margin",
-          "padding",
-          "border"
-        ]
-      }
-    },
-    {
-      "data": {
-        "id": "2_5",
-        "label": "使用浮动布局 (float)",
-        "type": "knowledge",
-        "select_element": [
+          "position",
           "float",
           "clear"
         ]
@@ -148,73 +126,36 @@
     {
       "data": {
         "id": "3_end",
-        "label": "模块三: JavaScript入门",
+        "label": "模块三: JavaScript基础",
         "type": "chapter"
       }
     },
     {
       "data": {
         "id": "3_1",
-        "label": "理解变量与数据类型",
-        "type": "knowledge",
-        "select_element": [
-          "variable",
-          "number",
-          "string",
-          "boolean",
-          "array",
-          "object"
-        ]
+        "label": "变量与数据类型",
+        "type": "knowledge"
       }
     },
     {
       "data": {
         "id": "3_2",
-        "label": "运用条件语句 (if, else)",
-        "type": "knowledge",
-        "select_element": [
-          "if",
-          "else",
-          "else if"
-        ]
+        "label": "函数与事件",
+        "type": "knowledge"
       }
     },
     {
       "data": {
         "id": "3_3",
-        "label": "循环语句 (for, while)",
-        "type": "knowledge",
-        "select_element": [
-          "for",
-          "while",
-          "do while"
-        ]
+        "label": "DOM操作与事件处理",
+        "type": "knowledge"
       }
     },
     {
       "data": {
         "id": "3_4",
-        "label": "操作网页元素 (DOM)",
-        "type": "knowledge",
-        "select_element": [
-          "getElementById",
-          "getElementsByClassName",
-          "querySelector",
-          "querySelectorAll"
-        ]
-      }
-    },
-    {
-      "data": {
-        "id": "3_5",
-        "label": "处理事件处理器 (event)",
-        "type": "knowledge",
-        "select_element": [
-          "addEventListener",
-          "removeEventListener",
-          "event.target",
-          "event.preventDefault"
-        ]
+        "label": "流程控制与表单验证",
+        "type": "knowledge"
       }
     }
   ],
@@ -245,12 +186,6 @@
     },
     {
       "data": {
-        "source": "1_end",
-        "target": "1_5"
-      }
-    },
-    {
-      "data": {
         "source": "2_end",
         "target": "2_1"
       }
@@ -271,12 +206,6 @@
       "data": {
         "source": "2_end",
         "target": "2_4"
-      }
-    },
-    {
-      "data": {
-        "source": "2_end",
-        "target": "2_5"
       }
     },
     {
@@ -302,12 +231,6 @@
         "source": "3_end",
         "target": "3_4"
       }
-    },
-    {
-      "data": {
-        "source": "3_end",
-        "target": "3_5"
-      }
     }
   ],
   "dependent_edges": [
@@ -331,12 +254,6 @@
     },
     {
       "data": {
-        "source": "1_4",
-        "target": "1_5"
-      }
-    },
-    {
-      "data": {
         "source": "2_1",
         "target": "2_2"
       }
@@ -355,12 +272,6 @@
     },
     {
       "data": {
-        "source": "2_4",
-        "target": "2_5"
-      }
-    },
-    {
-      "data": {
         "source": "3_1",
         "target": "3_2"
       }
@@ -375,12 +286,6 @@
       "data": {
         "source": "3_3",
         "target": "3_4"
-      }
-    },
-    {
-      "data": {
-        "source": "3_4",
-        "target": "3_5"
       }
     }
   ]

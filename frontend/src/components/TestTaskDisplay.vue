@@ -1,6 +1,6 @@
 <template>
   <div class="card">
-    <h2 class="card-title">测试题</h2>
+    <h2 class="card-title">实践案例</h2>
     
     <div v-if="loading" class="text-center">
       <div class="spinner"></div>

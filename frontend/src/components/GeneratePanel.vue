@@ -11,7 +11,7 @@
       
       <div v-else>
         <div class="form-group">
-          <label>PRD文档:</label>
+          <label>设计文档:</label>
           <div class="form-control">
             <p><strong>{{ prdData.title }}</strong></p>
             <p class="text-muted">内容长度: {{ prdData.content?.length || 0 }} 字符</p>
