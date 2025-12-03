@@ -2,66 +2,256 @@
   "nodes": [
     {
       "data": {
-        "id": "chapter1",
-        "label": "模块一:文本与页面结构基础",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "1_end",
+        "label": "模块一: HTML基础",
+        "type": "chapter"
       }
     },
     {
       "data": {
-        "id": "text_paragraph",
-        "label": "使用h元素和p元素体验标题与段落",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "1_1",
+        "label": "认识 HTML 语言",
+        "type": "knowledge"
       }
     },
     {
       "data": {
-        "id": "text_format",
-        "label": "应用文本格式(加粗、斜体)",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "1_2",
+        "label": "了解 HTML 元素与标签",
+        "type": "knowledge"
       }
     },
     {
       "data": {
-        "id": "gallery_display",
-        "label": "图库展示图片",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "1_3",
+        "label": "使用 h 元素和 p 元素体验标题与段落",
+        "type": "knowledge"
       }
     },
     {
       "data": {
-        "id": "list_display",
-        "label": "列表展示内容",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "1_4",
+        "label": "学习如何创建列表 (ul, ol, li)",
+        "type": "knowledge"
       }
     },
     {
       "data": {
-        "id": "form_input",
-        "label": "表单输入验证",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "1_5",
+        "label": "掌握如何插入图片与链接",
+        "type": "knowledge"
       }
     },
     {
       "data": {
-        "id": "media_player",
-        "label": "媒体播放器",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "2_end",
+        "label": "模块二: CSS基础",
+        "type": "chapter"
       }
     },
     {
       "data": {
-        "id": "custom_styles",
-        "label": "自定义样式",
-        "category": "media-block",
-        "placementHint": "main-content"
+        "id": "2_1",
+        "label": "理解 CSS 样式的作用",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "2_2",
+        "label": "应用文本格式 (加粗、斜体)",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "2_3",
+        "label": "掌握常见盒模型的概念",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "2_4",
+        "label": "学习如何设置背景样式",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "3_end",
+        "label": "模块三: JavaScript基础",
+        "type": "chapter"
+      }
+    },
+    {
+      "data": {
+        "id": "3_1",
+        "label": "认识 JavaScript 语言",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "3_2",
+        "label": "了解 JavaScript 的变量与数据类型",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "3_3",
+        "label": "掌握基本的运算符和表达式",
+        "type": "knowledge"
+      }
+    },
+    {
+      "data": {
+        "id": "3_4",
+        "label": "学习条件语句和循环结构",
+        "type": "knowledge"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "data": {
+        "source": "1_end",
+        "target": "1_1"
+      }
+    },
+    {
+      "data": {
+        "source": "1_end",
+        "target": "1_2"
+      }
+    },
+    {
+      "data": {
+        "source": "1_end",
+        "target": "1_3"
+      }
+    },
+    {
+      "data": {
+        "source": "1_end",
+        "target": "1_4"
+      }
+    },
+    {
+      "data": {
+        "source": "1_end",
+        "target": "1_5"
+      }
+    },
+    {
+      "data": {
+        "source": "2_end",
+        "target": "2_1"
+      }
+    },
+    {
+      "data": {
+        "source": "2_end",
+        "target": "2_2"
+      }
+    },
+    {
+      "data": {
+        "source": "2_end",
+        "target": "2_3"
+      }
+    },
+    {
+      "data": {
+        "source": "2_end",
+        "target": "2_4"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_1"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_2"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_3"
+      }
+    },
+    {
+      "data": {
+        "source": "3_end",
+        "target": "3_4"
+      }
+    }
+  ],
+  "dependent_edges": [
+    {
+      "data": {
+        "source": "1_1",
+        "target": "1_2"
+      }
+    },
+    {
+      "data": {
+        "source": "1_2",
+        "target": "1_3"
+      }
+    },
+    {
+      "data": {
+        "source": "1_3",
+        "target": "1_4"
+      }
+    },
+    {
+      "data": {
+        "source": "1_4",
+        "target": "1_5"
+      }
+    },
+    {
+      "data": {
+        "source": "2_1",
+        "target": "2_2"
+      }
+    },
+    {
+      "data": {
+        "source": "2_2",
+        "target": "2_3"
+      }
+    },
+    {
+      "data": {
+        "source": "2_3",
+        "target": "2_4"
+      }
+    },
+    {
+      "data": {
+        "source": "3_1",
+        "target": "3_2"
+      }
+    },
+    {
+      "data": {
+        "source": "3_2",
+        "target": "3_3"
+      }
+    },
+    {
+      "data": {
+        "source": "3_3",
+        "target": "3_4"
       }
     }
   ]

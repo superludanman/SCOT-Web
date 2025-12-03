@@ -73,7 +73,24 @@
         />
       </div>
       
-      <div class="form-group">
+      <!-- 切换视图 -->
+      <div class="view-toggle">
+        <button 
+          @click="currentView = 'list'" 
+          :class="['btn', 'btn-small', { 'btn-primary': currentView === 'list' }]"
+        >
+          列表视图
+        </button>
+        <button 
+          @click="currentView = 'graph'" 
+          :class="['btn', 'btn-small', { 'btn-primary': currentView === 'graph' }]"
+        >
+          图谱视图
+        </button>
+      </div>
+      
+      <!-- 列表视图 -->
+      <div v-if="currentView === 'list'" class="form-group">
         <label>知识点列表:</label>
         <div class="knowledge-list">
           <div 
@@ -85,6 +102,14 @@
             <span class="knowledge-label">{{ node.data.label }}</span>
           </div>
         </div>
+      </div>
+      
+      <!-- 图谱视图 -->
+      <div v-else-if="currentView === 'graph'">
+        <KnowledgeGraphVisualization 
+          :graph-data="knowledgeGraph"
+          @save-graph="handleSaveGraph"
+        />
       </div>
       
       <div class="d-flex justify-content-between">
@@ -106,9 +131,13 @@
 
 <script>
 import { knowledgeAPI, uploadAPI } from '../api/index.js';
+import KnowledgeGraphVisualization from './KnowledgeGraphVisualization.vue';
 
 export default {
   name: 'KnowledgeGraph',
+  components: {
+    KnowledgeGraphVisualization
+  },
   props: {
     referenceData: {
       type: Object,
@@ -126,7 +155,8 @@ export default {
       knowledgeGraph: null,
       graphName: '',
       loading: false,
-      savedKnowledgeId: null
+      savedKnowledgeId: null,
+      currentView: 'list' // 'list' 或 'graph'
     };
   },
   watch: {
@@ -226,6 +256,12 @@ export default {
       }
     },
     
+    handleSaveGraph(graph) {
+      // 更新当前知识图谱数据
+      this.knowledgeGraph = graph;
+      alert('图谱修改已保存到本地');
+    },
+    
     async saveKnowledgeGraph() {
       if (!this.graphName || !this.knowledgeGraph) {
         alert('请填写图谱名称并确保已提取知识点');
@@ -265,6 +301,7 @@ export default {
       this.knowledgeGraph = null;
       this.graphName = '';
       this.savedKnowledgeId = null;
+      this.currentView = 'list';
       const fileInput = document.getElementById('uploadedFile');
       if (fileInput) {
         fileInput.value = ''; // 清空文件输入
@@ -304,5 +341,22 @@ export default {
 
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.btn-small {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
 }
 </style>
