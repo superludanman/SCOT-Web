@@ -17,7 +17,7 @@ class FastMind:
         根据用户上传的 HTML 内容生成知识点文件或任务树 JSON
 
         :param html_content: 用户上传的 HTML 内容字符串
-        :param prd_text: 可选，SlowMind 生成的 PRD 文档内容（用于增强语义理解）
+        :param prd_text: 可选，SlowMind 生成的 PRD 文件内容（用于增强语义理解）
         :return: 生成的知识点数据（Python dict 格式）
         """
         prompt = get_knowledge_points_prompt_from_html(html_content, prd_text)
@@ -93,6 +93,45 @@ class FastMind:
         print(f"知识点已保存到：{save_path}")
 
         return knowledge_tree
+
+    def generate_learning_content(self, topic_info: dict) -> dict:
+        """
+        根据知识点信息生成学习内容
+        
+        :param topic_info: 包含知识点信息的字典
+        :return: 生成的学习内容
+        """
+        # 这里应该实现实际的AI调用逻辑
+        # 目前返回模拟数据
+        
+        topic_id = topic_info.get("topic_id", "unknown")
+        select_elements = topic_info.get("select_element", [])
+        
+        # 模拟生成的学习内容
+        learning_content = {
+            "topic_id": topic_id,
+            "title": f"关于{', '.join(select_elements) if select_elements else 'HTML'}的知识点",
+            "levels": [
+                {
+                    "level": 1,
+                    "description": "这是入门级别的讲解内容。在这里我们会介绍最基本的概念和语法，帮助初学者建立起对该知识点的基本认识。内容应该足够详细，让完全没有基础的人也能理解。"
+                },
+                {
+                    "level": 2,
+                    "description": "这是进阶级别的讲解内容。在掌握了基础知识之后，我们可以进一步探讨这些知识点在实际开发中的常见应用场景和组合用法，帮助学习者提升实践能力。"
+                },
+                {
+                    "level": 3,
+                    "description": "这是高级级别的讲解内容。在这个阶段，我们需要深入了解知识点背后的机制原理，以及在性能优化方面的考量，帮助学习者形成更加系统化的认知。"
+                },
+                {
+                    "level": 4,
+                    "description": "这是实战级别的讲解内容。通过综合性的实战案例和拓展练习，学习者可以检验和突破现有的水平，将理论知识转化为实际的编程能力。"
+                }
+            ]
+        }
+        
+        return learning_content
 
     def _get_mock_knowledge_points(self) -> dict:
         """模拟数据（调试用）"""

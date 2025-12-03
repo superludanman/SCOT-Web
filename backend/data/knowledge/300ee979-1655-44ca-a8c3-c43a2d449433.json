@@ -1,0 +1,308 @@
+{
+  "id": "300ee979-1655-44ca-a8c3-c43a2d449433",
+  "name": "知识点: www.wcf-bestcat.de",
+  "graph": {
+    "nodes": [
+      {
+        "data": {
+          "id": "1_end",
+          "label": "模块一: HTML基础",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "1_1",
+          "label": "使用 h 元素和 p 元素体验标题与段落",
+          "type": "knowledge",
+          "select_element": [
+            "h1",
+            "h2",
+            "h3",
+            "h4",
+            "h5",
+            "h6",
+            "p"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "1_2",
+          "label": "创建超链接（a 元素）",
+          "type": "knowledge",
+          "select_element": [
+            "a"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "1_3",
+          "label": "插入图片（img 元素）",
+          "type": "knowledge",
+          "select_element": [
+            "img"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "1_4",
+          "label": "添加无序列表（ul 元素）与有序列表（ol 元素）",
+          "type": "knowledge",
+          "select_element": [
+            "ul",
+            "li",
+            "ol"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_end",
+          "label": "模块二: CSS基础",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "2_1",
+          "label": "应用文本格式 (加粗、斜体)",
+          "type": "knowledge",
+          "select_element": [
+            "b",
+            "i",
+            "strong",
+            "em",
+            "u",
+            "s",
+            "mark",
+            "small",
+            "del",
+            "ins",
+            "sub",
+            "sup"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_2",
+          "label": "设置字体样式与大小",
+          "type": "knowledge",
+          "select_element": [
+            "font-size",
+            "font-family",
+            "font-weight",
+            "font-style"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "2_3",
+          "label": "调整文本对齐方式",
+          "type": "knowledge"
+        }
+      },
+      {
+        "data": {
+          "id": "3_end",
+          "label": "模块三: 布局与盒模型",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "3_1",
+          "label": "理解盒模型与调整边距",
+          "type": "knowledge"
+        }
+      },
+      {
+        "data": {
+          "id": "3_2",
+          "label": "使用浮动和定位元素",
+          "type": "knowledge",
+          "select_element": [
+            "float",
+            "position"
+          ]
+        }
+      },
+      {
+        "data": {
+          "id": "3_3",
+          "label": "创建响应式布局",
+          "type": "knowledge"
+        }
+      },
+      {
+        "data": {
+          "id": "4_end",
+          "label": "模块四: JavaScript基础",
+          "type": "chapter"
+        }
+      },
+      {
+        "data": {
+          "id": "4_1",
+          "label": "理解变量与数据类型",
+          "type": "knowledge"
+        }
+      },
+      {
+        "data": {
+          "id": "4_2",
+          "label": "使用条件语句",
+          "type": "knowledge"
+        }
+      },
+      {
+        "data": {
+          "id": "4_3",
+          "label": "循环语句与数组",
+          "type": "knowledge"
+        }
+      }
+    ],
+    "edges": [
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_1"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_2"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_3"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "1_4"
+        }
+      },
+      {
+        "data": {
+          "source": "1_end",
+          "target": "2_end"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_1"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_2"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "2_3"
+        }
+      },
+      {
+        "data": {
+          "source": "2_end",
+          "target": "3_end"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "3_1"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "3_2"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "3_3"
+        }
+      },
+      {
+        "data": {
+          "source": "3_end",
+          "target": "4_end"
+        }
+      },
+      {
+        "data": {
+          "source": "4_end",
+          "target": "4_1"
+        }
+      },
+      {
+        "data": {
+          "source": "4_end",
+          "target": "4_2"
+        }
+      },
+      {
+        "data": {
+          "source": "4_end",
+          "target": "4_3"
+        }
+      }
+    ],
+    "dependent_edges": [
+      {
+        "data": {
+          "source": "1_1",
+          "target": "1_2"
+        }
+      },
+      {
+        "data": {
+          "source": "1_2",
+          "target": "1_3"
+        }
+      },
+      {
+        "data": {
+          "source": "2_1",
+          "target": "2_2"
+        }
+      },
+      {
+        "data": {
+          "source": "3_1",
+          "target": "3_2"
+        }
+      },
+      {
+        "data": {
+          "source": "4_1",
+          "target": "4_2"
+        }
+      },
+      {
+        "data": {
+          "source": "4_2",
+          "target": "4_3"
+        }
+      }
+    ]
+  },
+  "created_at": "2025-12-03T18:55:38.620771"
+}

@@ -31,7 +31,8 @@
         <ul>
           <li>拖拽节点可移动位置</li>
           <li>拖拽节点到其他节点上可建立关系</li>
-          <li>点击节点可查看详情</li>
+          <li>点击章节节点可查看详情</li>
+          <li>点击知识点节点可学习相关内容</li>
           <li>点击边可删除关系</li>
         </ul>
       </div>
@@ -173,7 +174,8 @@ export default {
             data: {
               id: node.data.id,
               label: node.data.label,
-              type: node.data.type
+              type: node.data.type,
+              select_element: node.data.select_element || []
             },
             group: 'nodes'
           });
@@ -195,6 +197,23 @@ export default {
         });
       }
       
+      // 添加依赖边（如果存在）
+      if (this.graphData.dependent_edges) {
+        this.graphData.dependent_edges.forEach((edge, index) => {
+          elements.push({
+            data: {
+              id: `dep-edge-${index}`,
+              source: edge.data.source,
+              target: edge.data.target,
+              label: '',
+              type: 'dependent'
+            },
+            group: 'edges',
+            classes: 'dependent'
+          });
+        });
+      }
+      
       return elements;
     },
     
@@ -202,7 +221,16 @@ export default {
       // 节点点击事件
       this.cy.on('tap', 'node', (evt) => {
         const node = evt.target;
-        this.showNodeDetails(node);
+        const nodeType = node.data('type');
+        
+        // 根据节点类型执行不同操作
+        if (nodeType === 'chapter') {
+          // 章节节点显示详情
+          this.showNodeDetails(node);
+        } else {
+          // 知识点节点跳转到学习模块
+          this.learnKnowledge(node);
+        }
       });
       
       // 边点击事件
@@ -240,6 +268,19 @@ export default {
       alert(`节点详情:\nID: ${id}\n标签: ${label}\n类型: ${type}`);
     },
     
+    learnKnowledge(node) {
+      // 提取节点数据并传递给父组件
+      const nodeData = {
+        id: node.data('id'),
+        label: node.data('label'),
+        type: node.data('type'),
+        select_element: node.data('select_element') || []
+      };
+      
+      // 通知父组件跳转到学习知识点模块
+      this.$emit('learn-knowledge', nodeData);
+    },
+    
     zoomIn() {
       this.cy.zoom({
         level: this.cy.zoom() * 1.2,
@@ -270,7 +311,8 @@ export default {
         data: {
           id: node.data('id'),
           label: node.data('label'),
-          type: node.data('type')
+          type: node.data('type'),
+          select_element: node.data('select_element') || []
         }
       }));
       

@@ -9,6 +9,7 @@ from api.executor_router import executor_router
 from api.logs_router import logs_router
 from api.preview_router import preview_router
 from api.upload_router import upload_router
+from api.learning_router import learning_router
 
 app = FastAPI(
     title="结构化思维链网页智能生成与可视化系统（SCOT-Web）",
@@ -33,6 +34,7 @@ app.include_router(knowledge_router, prefix="/api/knowledge", tags=["Knowledge"]
 app.include_router(executor_router, prefix="/api/execute", tags=["Execute"])
 app.include_router(preview_router, prefix="/api/preview", tags=["Preview"])
 app.include_router(logs_router, prefix="/api/logs", tags=["Logs"])
+app.include_router(learning_router, prefix="/api/learning", tags=["Learning"])
 
 @app.get("/")
 async def root():

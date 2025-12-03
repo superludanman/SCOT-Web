@@ -100,6 +100,13 @@
           >
             <span class="knowledge-id">{{ index + 1 }}.</span>
             <span class="knowledge-label">{{ node.data.label }}</span>
+            <button 
+              v-if="node.data.type !== 'chapter'"
+              @click="learnKnowledge(node.data)"
+              class="btn btn-small btn-primary ml-auto"
+            >
+              学习
+            </button>
           </div>
         </div>
       </div>
@@ -109,6 +116,7 @@
         <KnowledgeGraphVisualization 
           :graph-data="knowledgeGraph"
           @save-graph="handleSaveGraph"
+          @learn-knowledge="learnKnowledge"
         />
       </div>
       
@@ -306,6 +314,11 @@ export default {
       if (fileInput) {
         fileInput.value = ''; // 清空文件输入
       }
+    },
+    
+    learnKnowledge(nodeData) {
+      // 通知父组件跳转到学习知识点模块
+      this.$emit('learn-knowledge', nodeData);
     }
   }
 };
@@ -321,6 +334,8 @@ export default {
 }
 
 .knowledge-item {
+  display: flex;
+  align-items: center;
   padding: 0.5rem;
   border-bottom: 1px solid var(--border-color);
 }
@@ -337,10 +352,15 @@ export default {
 
 .knowledge-label {
   color: var(--dark-color);
+  flex: 1;
 }
 
 .ml-2 {
   margin-left: 0.5rem;
+}
+
+.ml-auto {
+  margin-left: auto;
 }
 
 .view-toggle {

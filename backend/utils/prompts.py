@@ -186,8 +186,8 @@ def get_knowledge_points_prompt_from_html(html_content: str, user_goal: str = ""
 {{
   "nodes": [
     {{ "data": {{ "id": "1_end", "label": "模块一: 文本与页面结构基础", "type": "chapter" }} }},
-    {{ "data": {{ "id": "1_1", "label": "使用 h 元素和 p 元素体验标题与段落", "type": "knowledge" }} }},
-    {{ "data": {{ "id": "1_2", "label": "应用文本格式 (加粗、斜体)", "type": "knowledge" }} }}
+    {{ "data": {{ "id": "1_1", "label": "使用 h 元素和 p 元素体验标题与段落", "type": "knowledge","select_element": ["h1", "h2", "h3", "h4", "h5", "h6", "p"] }} }},
+    {{ "data": {{ "id": "1_2", "label": "应用文本格式 (加粗、斜体)", "type": "knowledge","select_element": ["b", "i", "strong", "em", "u", "s", "mark", "small", "del", "ins", "sub", "sup"] }} }},
     ...
   ],
   "edges": [
@@ -208,7 +208,8 @@ def get_knowledge_points_prompt_from_html(html_content: str, user_goal: str = ""
 - **nodes**：包含所有章节与知识点节点；
   - `id`：章节编号或知识点编号，如 “1_end”、“2_1”；
   - `label`：中文标题，清晰表达模块或技能名称；
-  - `type`：章节节点用 `"chapter"`，知识点节点用 `"knowledge"`。
+  - `type`：章节节点用 `"chapter"`，知识点节点用 `"knowledge"`；
+  - `select_element`：知识点相关的HTML 元素，如 `"h1"`、`"p"`、`"a"`。
 - **edges**：表示章节之间、章节与其下知识点之间的层级关系；
 - **dependent_edges**：表示知识点之间的逻辑依赖或学习顺序。
 
@@ -242,8 +243,8 @@ def get_knowledge_points_prompt(reference_url: str) -> str:
 {{
   "nodes": [
     {{ "data": {{ "id": "1_end", "label": "模块一: 文本与页面结构基础", "type": "chapter" }} }},
-    {{ "data": {{ "id": "1_1", "label": "使用 h 元素和 p 元素体验标题与段落", "type": "knowledge" }} }},
-    {{ "data": {{ "id": "1_2", "label": "应用文本格式 (加粗、斜体)", "type": "knowledge" }} }}
+    {{ "data": {{ "id": "1_1", "label": "使用 h 元素和 p 元素体验标题与段落", "type": "knowledge","select_element": ["h1", "h2", "h3", "h4", "h5", "h6", "p"] }} }},
+    {{ "data": {{ "id": "1_2", "label": "应用文本格式 (加粗、斜体)", "type": "knowledge","select_element": ["b", "i", "strong", "em", "u", "s", "mark", "small", "del", "ins", "sub", "sup"] }} }},
     ...
   ],
   "edges": [
@@ -264,7 +265,8 @@ def get_knowledge_points_prompt(reference_url: str) -> str:
 - **nodes**：包含所有章节与知识点节点；
   - `id`：章节编号或知识点编号，如 “1_end”、“2_1”；
   - `label`：中文标题，清晰表达模块或技能名称；
-  - `type`：章节节点用 `"chapter"`，知识点节点用 `"knowledge"`。
+  - `type`：章节节点用 `"chapter"`，知识点节点用 `"knowledge"`；
+  - `select_element`：知识点相关的HTML 元素，如 `"h1"`、`"p"`、`"a"`。
 - **edges**：表示章节之间、章节与其下知识点之间的层级关系；
 - **dependent_edges**：表示知识点之间的逻辑依赖或学习顺序。
 
@@ -329,7 +331,7 @@ def generate_demo_site_prompt(dependency_context=None, existing_code_context=Non
 
 ### 第一部分：项目主页面代码（嵌入所有 HTML、CSS、JS）
 
-```html filename=public/index.html
+``html filename=public/index.html
 <!-- 请将 HTML、CSS（<style>）、JS（<script>）全部写在同一个文件中 -->
 <!-- 确保语义清晰、结构分明、样式美观，包含用户交互与猫咪主题内容 -->
 
@@ -352,3 +354,58 @@ def generate_demo_site_prompt(dependency_context=None, existing_code_context=Non
 6.不得拆分为多个文件，只能输出一个 HTML 文件。
 
 """
+
+def generate_learning_content_prompt(topic_info: dict) -> str:
+    """
+    生成学习内容提示词，适配知识图谱 data 结构
+    """
+
+    topic_id = topic_info.get("id", "")
+    title = topic_info.get("label", "未命名知识点")
+    select_elements = topic_info.get("select_element", [])
+
+    prompt = f"""
+您是一位专业的前端开发导师，擅长为零基础学习者讲解前端知识。现在需要根据传入的知识点信息，为学生生成系统化的学习内容。
+
+请根据以下知识点信息生成内容：
+
+知识点ID：{topic_id}
+知识点标题：{title}
+涉及的HTML/CSS/JS元素或属性：{", ".join(select_elements) if select_elements else "无特别指定"}
+
+请编写适合零基础的学习内容，并严格按照以下 JSON 结构返回（不要添加任何额外说明、前后缀或解释文本）：
+
+{{
+  "topic_id": "{topic_id}",
+  "title": "{title}",
+  "levels": [
+    {{
+      "level": 1,
+      "description": "适合零基础入门，掌握核心概念与基本语法。不少于300字。"
+    }},
+    {{
+      "level": 2,
+      "description": "理解知识点常见的场景与组合用法，提升实践能力。不少于300字。"
+    }},
+    {{
+      "level": 3,
+      "description": "深入知识点的机制与性能优化，形成系统化认知。不少于300字。"
+    }},
+    {{
+      "level": 4,
+      "description": "综合实战与拓展题，必须包含示例代码，不少于300字。"
+    }}
+  ]
+}}
+
+生成要求：
+1. 必须返回纯 JSON，不要包含任何额外文本。
+2. description 字段中不允许出现标题格式（如“概念：”“说明：”等）。
+3. 每个 description 必须直接以正文开头。
+4. 专业术语必须解释清楚，让零基础也能理解。
+5. 所有内容必须与前端开发及本知识点相关。
+6. Level 4 必须包含完整且可运行的代码示例（HTML/CSS/JS 均可）。
+7. 全部内容必须使用中文。
+"""
+
+    return prompt

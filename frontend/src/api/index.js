@@ -89,6 +89,14 @@ export const knowledgeAPI = {
     }
 };
 
+// 学习知识点相关API
+export const learningAPI = {
+    // 生成知识点学习内容
+    generateKnowledgeContent: (data) => {
+        return apiService.post('/api/learning/generate-knowledge-point', data);
+    }
+};
+
 // 执行器相关API
 export const executorAPI = {
     // 执行任务

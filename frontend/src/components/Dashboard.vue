@@ -18,6 +18,11 @@
         <div class="step-title">提取知识点</div>
       </div>
       
+      <div class="step" :class="{ 'active': currentStep === 3.5 }" @click="goToStep(3.5)" v-if="showLearningStep">
+        <div class="step-number">-</div>
+        <div class="step-title">学习知识点</div>
+      </div>
+      
       <div class="step" :class="{ 'active': currentStep === 4 }" @click="goToStep(4)">
         <div class="step-number">4</div>
         <div class="step-title">生成网页</div>
@@ -57,10 +62,17 @@
         :knowledge-data="knowledgeData"
         @knowledge-saved="onKnowledgeSaved"
         @knowledge-extracted="onKnowledgeExtracted"
+        @learn-knowledge="onLearnKnowledge"
+      />
+      
+      <LearningContent
+        v-else-if="currentStep === 3.5"
+        :knowledge-node="learningNode"
+        @back-to-graph="backToKnowledgeGraph"
       />
       
       <GeneratePanel 
-        v-if="currentStep === 4" 
+        v-else-if="currentStep === 4" 
         ref="generatePanel"
         :prd-data="prdData"
         :knowledge-data="knowledgeData"
@@ -73,7 +85,7 @@
       />
     </div>
     
-    <div class="navigation mt-4" v-if="currentStep > 1">
+    <div class="navigation mt-4" v-if="currentStep > 1 && currentStep !== 3.5">
       <button @click="prevStep" class="btn btn-secondary">上一步</button>
       <button 
         v-if="currentStep < 5" 
@@ -84,6 +96,10 @@
         下一步
       </button>
     </div>
+    
+    <div class="navigation mt-4" v-else-if="currentStep === 3.5">
+      <button @click="backToKnowledgeGraph" class="btn btn-secondary">返回知识点图谱</button>
+    </div>
   </div>
 </template>
 
@@ -91,6 +107,7 @@
 import UploadPanel from './UploadPanel.vue';
 import PRDPanel from './PRDPanel.vue';
 import KnowledgeGraph from './KnowledgeGraph.vue';
+import LearningContent from './LearningContent.vue';
 import GeneratePanel from './GeneratePanel.vue';
 import PreviewPane from './PreviewPane.vue';
 
@@ -100,6 +117,7 @@ export default {
     UploadPanel,
     PRDPanel,
     KnowledgeGraph,
+    LearningContent,
     GeneratePanel,
     PreviewPane
   },
@@ -111,13 +129,15 @@ export default {
       prdData: null,          // PRD数据
       knowledgeData: null,    // 知识点数据
       generatedTaskId: '',    // 生成任务ID
-      canProceed: false
+      canProceed: false,
+      showLearningStep: false, // 是否显示学习步骤
+      learningNode: null      // 当前学习的知识点节点
     };
   },
   methods: {
     goToStep(step) {
       // 允许用户点击步骤标题导航到对应步骤
-      if (step <= 5 && step >= 1) {
+      if ((step <= 5 && step >= 1) || step === 3.5) {
         this.currentStep = step;
         this.canProceed = false;
       }
@@ -165,6 +185,19 @@ export default {
     onKnowledgeSaved() {
       this.canProceed = true;
       console.log('知识点已保存，可以进行下一步');
+    },
+    
+    onLearnKnowledge(nodeData) {
+      this.learningNode = nodeData;
+      this.showLearningStep = true;
+      this.currentStep = 3.5; // 跳转到学习知识点模块
+      console.log('进入学习知识点模块');
+    },
+    
+    backToKnowledgeGraph() {
+      this.currentStep = 3;
+      this.learningNode = null;
+      console.log('返回知识点图谱');
     },
     
     onWebsiteGenerated(data) {

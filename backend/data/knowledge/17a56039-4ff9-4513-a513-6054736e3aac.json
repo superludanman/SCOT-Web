@@ -1,0 +1,33 @@
+{
+  "id": "17a56039-4ff9-4513-a513-6054736e3aac",
+  "name": "知识点: www.wcf-bestcat.de",
+  "graph": {
+    "nodes": [
+      {
+        "data": {
+          "id": "chapter1",
+          "label": "模块一:文本与页面结构基础",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "text_paragraph",
+          "label": "使用h元素和p元素体验标题与段落",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      },
+      {
+        "data": {
+          "id": "style_basic",
+          "label": "设置颜色与字体",
+          "category": "media-block",
+          "placementHint": "main-content"
+        }
+      }
+    ]
+  },
+  "created_at": "2025-12-03T18:31:25.038044"
+}
